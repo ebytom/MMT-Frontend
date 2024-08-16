@@ -1,5 +1,8 @@
 .App {
-  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* height: 100vh; */
 }
 
 .App-logo {
@@ -32,7 +35,45 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
+  }
+}
+
+.compShadow {
+  box-shadow: 2px 3px 7px 2px #a6a6a6;
+}
+
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(200px, 1fr)
+  ); /* Adjust 200px to the minimum width of your cards */
+  gap: 20px; /* Small space between cards */
+  /* padding: 10px; Optional padding if you want space around the grid */
+}
+
+/* Optional: Adjust grid template columns for different screen sizes */
+@media (min-width: 768px) {
+  /* For tablets and above */
+  .dashboard-container {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(220px, 1fr)
+    ); /* Adjust 220px based on your card's width */
+    gap: 20px; /* Slightly larger gap for medium screens */
+  }
+}
+
+@media (min-width: 1024px) {
+  /* For laptops and above */
+  .dashboard-container {
+    grid-template-columns: repeat(
+      5,
+      1fr
+    ); /* Exactly 4 cards per row on laptop and larger screens */
+    gap: 20px; /* Larger gap for larger screens */
   }
 }
