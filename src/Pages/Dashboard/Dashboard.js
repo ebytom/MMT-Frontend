@@ -102,12 +102,15 @@ const Dashboard = () => {
       <Divider
         style={{
           borderColor: "#000",
-          margin: "30px 0px",
+          margin: "50px 0px",
         }}
       >
         Manage Vehicles
       </Divider>
-      <div className="dashboard-container">
+      <div className="dashboard-container pb-5">
+        <VehicleCard />
+        <VehicleCard />
+        <VehicleCard />
         <VehicleCard />
         <VehicleCard />
         <VehicleCard />
