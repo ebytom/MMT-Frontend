@@ -52,6 +52,7 @@
     minmax(200px, 1fr)
   ); /* Adjust 200px to the minimum width of your cards */
   gap: 20px; /* Small space between cards */
+  margin-top: 40px;
   /* padding: 10px; Optional padding if you want space around the grid */
 }
 
