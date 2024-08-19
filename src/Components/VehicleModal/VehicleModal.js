@@ -60,7 +60,7 @@ const VehicleModal = forwardRef(({ addNewVehicle }, ref) => {
           labelWrap
           wrapperCol={{ flex: 1 }}
           colon={false}
-          style={{ maxWidth: 600 }}
+          style={{ maxWidth: 600, marginTop:50 }}
         >
           <Form.Item
             label="Upload Vehicle Image"

@@ -138,11 +138,31 @@ const Dashboard = () => {
   return (
     <>
       <div className="dashboard-container">
-        <StatisticCard title={"Total Expenses"} value={200000} />
-        <StatisticCard title={"Total Fuel Expenses"} value={200000} />
-        <StatisticCard title={"Total Def Expenses"} value={3767} />
-        <StatisticCard title={"Total Other Expenses"} value={767647} />
-        <StatisticCard title={"Total Fuel Used"} value={666644} />
+        <StatisticCard
+          title={"Total Expenses"}
+          value={200000}
+          thisMonth={5657}
+        />
+        <StatisticCard
+          title={"Total Fuel Expenses"}
+          value={200000}
+          thisMonth={8767}
+        />
+        <StatisticCard
+          title={"Total Def Expenses"}
+          value={3767}
+          thisMonth={9879}
+        />
+        <StatisticCard
+          title={"Total Other Expenses"}
+          value={767647}
+          thisMonth={7567}
+        />
+        <StatisticCard
+          title={"Total Fuel Used"}
+          value={666644}
+          thisMonth={8868}
+        />
       </div>
       <Divider
         style={{
