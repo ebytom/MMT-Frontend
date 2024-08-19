@@ -8,7 +8,6 @@ import Signup from '../Pages/Auth/Signup/Signup'
 const Routes = () => {
 
     const { user } = useContext(UserContext)
-    console.log(user);
     return (
         <BrowserRouter>
             {

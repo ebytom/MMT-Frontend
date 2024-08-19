@@ -1,0 +1,102 @@
+import React, { forwardRef, useImperativeHandle, useState } from "react";
+import { Button, Form, Input, Modal, Upload } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { AppsIcon, FlameIcon, LogIcon } from "@primer/octicons-react";
+import { useNavigate } from "react-router-dom";
+
+const CatalogModal = forwardRef(({ regNo }, ref) => {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate()
+
+  const showLoading = () => {
+    setOpen(true);
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  };
+
+  useImperativeHandle(ref, () => ({
+    showLoading,
+  }));
+
+  return (
+    <>
+      <Modal
+        title={regNo}
+        open={open}
+        footer={null}
+        onCancel={() => setOpen(false)}
+        loading={loading}
+      >
+        <div className="my-4">
+        <Button
+          type="primary"
+          size={"large"}
+          className="my-3"
+          style={{
+            width: "100%",
+            height: "60px",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          onClick={()=>navigate(`/expenseSummary/${regNo}/fuelExpenses`)}
+        >
+          <div className="d-flex align-items-center p-2">
+          <FlameIcon size={24} />
+            <span className="ms-3 fw-bold">Fuel Expenses</span>
+          </div>
+          <div className="bg-white p-1 rounded text-black w-50">
+            <span className="fw-bold">2000</span>
+          </div>
+        </Button>
+        <Button
+          type="primary"
+          size={"large"}
+          className="my-3"
+          style={{
+            width: "100%",
+            height: "60px",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          onClick={()=>navigate(`/expenseSummary/${regNo}/defExpenses`)}
+        >
+          <div className="d-flex align-items-center p-2">
+          <AppsIcon size={22} />
+            <span className="ms-3 fw-bold">Def Expenses</span>
+          </div>
+          <div className="bg-white p-1 rounded text-black w-50">
+            <span className="fw-bold">2000</span>
+          </div>
+        </Button>
+        <Button
+          type="primary"
+          size={"large"}
+          className="my-2"
+          style={{
+            width: "100%",
+            height: "60px",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          onClick={()=>navigate(`/expenseSummary/${regNo}/otherExpenses`)}
+        >
+          <div className="d-flex align-items-center p-2">
+            <LogIcon size={22} />
+            <span className="ms-3 fw-bold">Other Expenses</span>
+          </div>
+          <div className="bg-white p-1 rounded text-black w-50">
+            <span className="fw-bold">2000</span>
+          </div>
+        </Button>
+        </div>
+      </Modal>
+    </>
+  );
+});
+
+export default CatalogModal;

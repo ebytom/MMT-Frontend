@@ -18,29 +18,23 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
     setProfileOpen(false);
   };
 
-  const config = {
-    title: "Use Hook!",
-    content: (
-      <>
-        <ReachableContext.Consumer>
-          {(name) => `Reachable: ${name}!`}
-        </ReachableContext.Consumer>
-        <br />
-        <UnreachableContext.Consumer>
-          {(name) => `Unreachable: ${name}!`}
-        </UnreachableContext.Consumer>
-      </>
-    ),
+  //   const signout = async () => {
+  //     console.log("Confirmed: ", confirmed);
+  //     if (confirmed) {
+  //       googleLogout();
+  //       localStorage.removeItem("token");
+  //       window.location.reload();
+  //     }
+  //   };
+
+  const handleOk = () => {
+    googleLogout();
+    localStorage.removeItem("token");
+    window.location.reload();
   };
 
-  const signout = async () => {
-    const confirmed = await Modal.confirm(config);
-    console.log("Confirmed: ", confirmed);
-    if (confirmed) {
-      googleLogout();
-      localStorage.removeItem("token");
-      window.location.reload();
-    }
+  const handleCancel = () => {
+    console.log("Cancel clicked");
   };
 
   return (
@@ -56,7 +50,11 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
         <div className="card-body text-center">
           <div className="mt-3 mb-4">
             <img
-              src={userCredentials?.picture?userCredentials?.picture:"https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"}
+              src={
+                userCredentials?.picture
+                  ? userCredentials.picture
+                  : "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+              }
               className="rounded-circle img-fluid"
               style={{ width: "100px" }}
               alt="User"
@@ -64,7 +62,8 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
           </div>
           <h4 className="mb-2">{userCredentials?.name}</h4>
           <p className="text-muted mb-4">
-            8547520864 <span className="mx-2">|</span> {userCredentials?.email}
+            {/* 8547520864 <span className="mx-2">|</span>  */}
+            {userCredentials?.email}
           </p>
           <div className="mb-4 pb-2 d-flex flex-column gap-2">
             <button
@@ -90,13 +89,19 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
             </button>
           </div>
           <div className="d-flex flex-column">
-            <button
-              type="button"
-              className="btn btn-danger btn-rounded btn-floating"
-              onClick={() => signout()}
+            <ConfirmModal
+              title="Confirm Action"
+              content="Are you sure you want to signout?"
+              onOk={handleOk}
+              onCancel={handleCancel}
             >
-              Logout
-            </button>
+              <button
+                type="button"
+                className="btn btn-danger btn-rounded btn-floating"
+              >
+                Logout
+              </button>
+            </ConfirmModal>
           </div>
           <Divider />
           <div className="d-flex justify-content-between text-center mt-3 mb-2">
@@ -115,7 +120,6 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
           </div>
         </div>
       </div>
-      <ConfirmModal />
     </Drawer>
   );
 };

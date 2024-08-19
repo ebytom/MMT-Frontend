@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { Axios } from "../../../Config/Axios/Axios";
 import { UserContext } from "../../../App";
 import { EyeIcon, EyeClosedIcon } from "@primer/octicons-react";
+import { MailFilled, PhoneFilled } from "@ant-design/icons";
 import { Ring } from "@uiball/loaders";
 import { useNavigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -20,104 +21,37 @@ const Login = ({ setauthenticated }) => {
   const nav = useNavigate();
 
   useEffect(() => {
-    // if (sessionStorage.getItem("token") != null) {
-    //   Axios.post(
-    //     "/api/v1/app/users/getMyProfile",
-    //     {},
-    //     {
-    //       headers: {
-    //         authorization: `beare ${sessionStorage.getItem("token")}`,
-    //       },
-    //     }
-    //   )
-    //     .then((res) => {
-    //       if (res?.data?.user?.email != null) setUser(res.data.user);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //       seterr("Session Expired! login again...");
-    //       sessionStorage.removeItem("token");
-    //     });
-    // }
-
     if (localStorage.getItem("token") != null) {
-    //   Axios.post(
-    //     "/api/v1/app/users/getMyProfile",
-    //     {},
-    //     {
-    //       headers: {
-    //         authorization: `beare ${sessionStorage.getItem("token")}`,
-    //       },
-    //     }
-    //   )
-    //     .then((res) => {
-    //       if (res?.data?.user?.email != null) setUser(res.data.user);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //       seterr("Session Expired! login again...");
-    //       sessionStorage.removeItem("token");
-    //     });
-    setUser(localStorage.getItem('token'))
+      setUser(localStorage.getItem("token"));
     }
   }, []);
-
-  //   const login = async () => {
-  //     setloading(true);
-  //     const response = await fetch(
-  //       process.env.REACT_APP_BACKEND_URL + "/api/v1/app/auth/logIn",
-  //       {
-  //         method: "POST",
-  //         body: JSON.stringify({
-  //           email: email.toLowerCase(),
-  //           password: pswd,
-  //         }),
-  //         headers: {
-  //           "Content-type": "application/json; charset=UTF-8",
-  //         },
-  //       }
-  //     )
-  //       .then(async (res) => {
-  //         const data = await res.json();
-  //         console.log(data);
-
-  //         Axios.post(
-  //           "/api/v1/app/users/getMyProfile",
-  //           {},
-  //           {
-  //             headers: {
-  //               authorization: `beare ${data.token}`,
-  //             },
-  //           }
-  //         )
-  //           .then((res) => {
-  //             console.log(res?.data.user);
-  //             if (res?.data?.user?.email != null) setUser(res.data.user);
-  //             sessionStorage.setItem("token", data.token);
-  //             setloading(false);
-  //           })
-  //           .catch((err) => {
-  //             console.log(err);
-  //             seterr("Invalid Credentials");
-  //             setloading(false);
-  //           });
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         seterr(err.message);
-  //         seterr("Something went wrong! try again");
-  //         setloading(false);
-  //       });
-  //   };
-
   const login = (credentialResponse) => {
     console.log(credentialResponse);
-    const decodedCredentials = jwtDecode(credentialResponse.credential)
+    const decodedCredentials = jwtDecode(credentialResponse.credential);
     console.log(decodedCredentials);
-    
+
     setUser(credentialResponse.credential);
-    localStorage.setItem('token', credentialResponse.credential)
+    localStorage.setItem("token", credentialResponse.credential);
   };
+
+  //   useEffect(
+  //     () => {
+  //         if (user) {
+  //             axios
+  //                 .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+  //                     headers: {
+  //                         Authorization: `Bearer ${user.access_token}`,
+  //                         Accept: 'application/json'
+  //                     }
+  //                 })
+  //                 .then((res) => {
+  //                     setProfile(res.data);
+  //                 })
+  //                 .catch((err) => console.log(err));
+  //         }
+  //     },
+  //     [ user ]
+  // );
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -127,91 +61,137 @@ const Login = ({ setauthenticated }) => {
   };
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
+    // <div
+    //   className="d-flex justify-content-center align-items-center"
+    //   style={{ height: "100vh", width: "100vw" }}
+    // >
+    //   <div id="main-wrapper" className="container">
+    //     <div className="row justify-content-center">
+    //       <div className="col-xl-10">
+    //         <div className="card border-0">
+    //           <div className="card-body p-0">
+    //             <div
+    //               className="row rounded-3 no-gutters"
+    //               style={{
+    //                 //   backgroundColor: "#000",
+    //                 boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px",
+    //               }}
+    //             >
+    //               <div className="col-lg-6">
+    //                 <div className="p-5">
+    //                   <div className="mb-5">
+    //                     <h3 className="h4 font-weight-bold text-theme">Login</h3>
+    //                   </div>
+
+    //                   <h6 className="h5 mb-0">Welcome back!</h6>
+    //                   <p className="text-muted mt-2 mb-5">
+    //                     Efficiently manage your fleet with{" "}
+    //                     <strong>Manage My Truck</strong>. Track expenses,
+    //                     monitor profits, and generate detailed reports with
+    //                     ease.
+    //                   </p>
+
+    //                   <GoogleLogin
+    //                     onSuccess={(credentialResponse) => {
+    //                       login(credentialResponse);
+    //                     }}
+    //                     onError={() => {
+    //                       console.log("Login Failed");
+    //                     }}
+    //                   />
+    //                 </div>
+    //               </div>
+
+    //               <div className="col-lg-6 d-none d-lg-inline-block p-0 rounded-3">
+    //                 <div className="account-block rounded-right rounded-3">
+    //                   <div className="overlay rounded-right rounded-3"></div>
+    //                   <div className="account-testimonial rounded-3">
+    //                     <p className="lead text-white">
+    //                       "Efficiency is doing things right; effectiveness is doing the right things."
+    //                     </p>
+    //                     <p>- Peter Drucker</p>
+    //                   </div>
+    //                 </div>
+    //               </div>
+    //             </div>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <section
+      className="bg-primary py-3 py-md-5 py-xl-8"
       style={{ height: "100vh", width: "100vw" }}
     >
-      <div
-        className="rounded-3 p-4 d-flex flex-column align-items-center"
-        style={{
-          backgroundColor: "#dede28cf",
-          boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px",
-        }}
-      >
-        {/* <img className="m-4 mb-2" src="/tiei.png" style={{ width: "50%" }} /> */}
-        <img src="mmt_logo.png" height="100px" className="my-3" />
-        <b className="h3 fw-bold pb-2">Manage My Truck</b>
-        {err !== "" && <b className="text-danger mb-2">{err}</b>}
-
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            login(credentialResponse);
-          }}
-          onError={() => {
-            console.log("Login Failed");
-          }}
-        />
-
-        <div className="d-flex flex-column align-items-center">
-          {/* <input
-            style={{
-              width: "250px",
-              outline: "none",
-              border: "none",
-              background: "#e8f0fe",
-            }}
-            className="rounded-3 m-2 p-2 "
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setemail(e.target.value)}
-            onKeyDown={handleKeyDown}
-          ></input>
-          <div
-            style={{ width: "250px", background: "#e8f0fe" }}
-            className="d-flex justify-content-between rounded-3 m-2 p-2 pe-4"
-          >
-            <input
-              style={{ outline: "none", border: "none", background: "#e8f0fe" }}
-              type={viewPassword ? "text" : "password"}
-              placeholder="Password"
-              value={pswd}
-              onChange={(e) => setpswd(e.target.value)}
-              onKeyDown={handleKeyDown}
-            ></input>
-            <div
-              onClick={() => setviewPassword(!viewPassword)}
-              className="d-flex me-0"
-              style={{ cursor: "pointer", margin: "auto" }}
-            >
-              {viewPassword ? (
-                <EyeClosedIcon size={18} />
-              ) : (
-                <EyeIcon size={18} />
-              )}
+      <div className="container mt-5">
+        <div className="row gy-4 align-items-center">
+          <div className="col-12 col-md-6 col-xl-7">
+            <div className="d-flex justify-content-center text-bg-primary">
+              <div className="col-12 col-xl-9">
+                <h1>
+                  <b>Manage My Truck</b>
+                </h1>
+                <hr className="border-primary-subtle mb-4" />
+                <p className="lead mb-5">
+                  Efficiently manage your fleet with{" "}
+                  <strong>Manage My Truck</strong>. Track expenses, monitor
+                  profits, and generate detailed reports with ease.
+                </p>
+              </div>
             </div>
           </div>
-          <div
-            onClick={() => login()}
-            className="btn btn-dark w-100 ms-2 mt-3 py-2"
-          >
-            {loading ? (
-              <Ring size={20} speed={2} color="white" />
-            ) : (
-              <b>Login</b>
-            )}
-          </div> */}
-          <div className="mt-3">
-            <b>
-              Don't have account?{" "}
-              <span onClick={() => nav("/signup")} className="text-danger">
-                Signup
-              </span>
-            </b>
+          <div className="col-12 col-md-6 col-xl-5">
+            <div className="card border-0 rounded-4">
+              <div className="card-body p-3 p-md-4 p-xl-5">
+                <div className="row">
+                  <div className="col-12">
+                    <div className="mb-4">
+                      <h3>Sign in</h3>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-100 d-flex">
+                  <div className="flex-grow-1">
+                    <GoogleLogin
+                    width={320}
+                      onSuccess={(credentialResponse) => {
+                        login(credentialResponse);
+                      }}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                  </div>
+                </div>
+                <hr className="border-primary-subtle mb-4" />
+                {/* <span className="text-danger" style={{fontSize: 8, fontFamily: 'revert'}}>*Note: This application is available only to users who have subscribed by reaching out to the admin team.</span> */}
+                <div className="row">
+                  <div className="col-12">
+                    <p className="mt-4 mb-4">Contact us</p>
+                    <div className="d-flex gap-2 gap-sm-3 justify-content-centerX">
+                      <a
+                        href="#!"
+                        className="btn btn-outline-danger bsb-btn-circle bsb-btn-circle-2xl"
+                      >
+                        <MailFilled />
+                      </a>
+                      <a
+                        href="#!"
+                        className="btn btn-outline-danger bsb-btn-circle bsb-btn-circle-2xl"
+                      >
+                        <PhoneFilled />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

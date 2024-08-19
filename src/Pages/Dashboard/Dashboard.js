@@ -1,5 +1,5 @@
 import { DesktopDownloadIcon, HistoryIcon } from "@primer/octicons-react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Axios } from "../../Config/Axios/Axios";
 import { UserContext } from "../../App";
 import { Button, Divider, Modal } from "antd";
@@ -7,6 +7,7 @@ import { Ring } from "@uiball/loaders";
 import StatisticCard from "../../Components/StatisticCard/StatisticCard";
 import VehicleCard from "../../Components/VehicleCard/VehicleCard";
 import { PlusCircleFilled } from "@ant-design/icons";
+import VehicleModal from "../../Components/VehicleModal/VehicleModal";
 
 const Dashboard = () => {
   // useEffect(() => {
@@ -90,14 +91,58 @@ const Dashboard = () => {
   //         })
   // }
 
+  const [vehicleSampleData, setVehicleSampleData] = useState([
+    {
+      imgURL: "/truck.jpg",
+      vehicleNo: "MH12P5678",
+      chassisNo: "ijkl5678mnop",
+      engineNo: "lmn1234",
+      desc: "A blue motorcycle perfect for city commutes.",
+    },
+    {
+      imgURL: "/truck.jpg",
+      vehicleNo: "KA03R7890",
+      chassisNo: "qrst9012uvwx",
+      engineNo: "opq5678",
+      desc: "A spacious SUV with off-road capabilities. A spacious SUV with off-road capabilities. ",
+    },
+    {
+      imgURL: "/truck.jpg",
+      vehicleNo: "HR26S2345",
+      chassisNo: "yzab3456cdef",
+      engineNo: "stu9012",
+      desc: "A white van ideal for family trips.",
+    },
+    {
+      imgURL: "/truck.jpg",
+      vehicleNo: "UP32T6789",
+      chassisNo: "ghij7890klmn",
+      engineNo: "vwx3456",
+      desc: "A large bus suitable for group travel.",
+    },
+  ]);
+
+  const vehicleModalRef = useRef();
+
+  const callVehicleModal = () => {
+    if (vehicleModalRef.current) {
+      vehicleModalRef.current.showLoading();
+    }
+  };
+
+  const addNewVehicle = (newVehicleDetails) => {
+    console.log(newVehicleDetails);
+    setVehicleSampleData((pre) => [...pre, newVehicleDetails]);
+  };
+
   return (
     <>
       <div className="dashboard-container">
         <StatisticCard title={"Total Expenses"} value={200000} />
-        <StatisticCard title={"Total Profit"} value={3767} />
-        <StatisticCard title={"Total Toll"} value={767647} />
-        <StatisticCard title={"Total Maintainance"} value={666644} />
-        <StatisticCard title={"Total Fuel"} value={589767} />
+        <StatisticCard title={"Total Fuel Expenses"} value={200000} />
+        <StatisticCard title={"Total Def Expenses"} value={3767} />
+        <StatisticCard title={"Total Other Expenses"} value={767647} />
+        <StatisticCard title={"Total Fuel Used"} value={666644} />
       </div>
       <Divider
         style={{
@@ -108,16 +153,19 @@ const Dashboard = () => {
         Manage Vehicles
       </Divider>
       <div className="dashboard-container pb-5">
-        <VehicleCard />
-        <VehicleCard />
-        <VehicleCard />
-        <VehicleCard />
-        <VehicleCard />
-        <VehicleCard />
-        <button className="bg-light rounded d-flex align-items-center justify-content-center" style={{border: '2px dashed #d6d6d6', minHeight: 150}}>
-          <PlusCircleFilled style={{fontSize: 76, color: '#d6d6d6'}}/>
+        {vehicleSampleData.map((vehicle) => {
+          return <VehicleCard key={vehicle.vehicleNo} data={vehicle} />;
+        })}
+
+        <button
+          className="bg-light rounded d-flex align-items-center justify-content-center"
+          style={{ border: "2px dashed #d6d6d6", minHeight: 150 }}
+          onClick={callVehicleModal}
+        >
+          <PlusCircleFilled style={{ fontSize: 76, color: "#d6d6d6" }} />
         </button>
       </div>
+      <VehicleModal ref={vehicleModalRef} addNewVehicle={addNewVehicle} />
     </>
   );
 };

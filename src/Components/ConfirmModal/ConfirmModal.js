@@ -1,59 +1,26 @@
-import React, { createContext } from 'react';
-import { Button, Modal, Space } from 'antd';
-const ReachableContext = createContext(null);
-const UnreachableContext = createContext(null);
+import React from 'react';
+import { Modal } from 'antd';
+import PropTypes from 'prop-types';
 
-const ConfirmModal = (props) => {
-  const [modal, contextHolder] = Modal.useModal();
-  const config = {
-    title: 'Use Hook!',
-    content: (
-      <>
-        <ReachableContext.Consumer>{(name) => `Reachable: ${name}!`}</ReachableContext.Consumer>
-        <br />
-        <UnreachableContext.Consumer>{(name) => `Unreachable: ${name}!`}</UnreachableContext.Consumer>
-      </>
-    ),
+const ConfirmModal = ({ title, content, onOk, onCancel, children }) => {
+  const handleClick = () => {
+    Modal.confirm({
+      title: title || 'Are you sure?',
+      content: content || 'Do you really want to perform this action?',
+      onOk: onOk,
+      onCancel: onCancel,
+    });
   };
-  return (
-    <ReachableContext.Provider value="Light">
-      <Space>
-        <Button
-          onClick={async () => {
-            const confirmed = await modal.confirm(config);
-            console.log('Confirmed: ', confirmed);
-          }}
-        >
-          Confirm
-        </Button>
-        <Button
-          onClick={() => {
-            modal.warning(config);
-          }}
-        >
-          Warning
-        </Button>
-        <Button
-          onClick={async () => {
-            modal.info(config);
-          }}
-        >
-          Info
-        </Button>
-        <Button
-          onClick={async () => {
-            modal.error(config);
-          }}
-        >
-          Error
-        </Button>
-      </Space>
-      {/* `contextHolder` should always be placed under the context you want to access */}
-      {contextHolder}
 
-      {/* Can not access this context since `contextHolder` is not in it */}
-      <UnreachableContext.Provider value="Bamboo" />
-    </ReachableContext.Provider>
-  );
+  return React.cloneElement(children, { onClick: handleClick });
 };
+
+ConfirmModal.propTypes = {
+  title: PropTypes.string,
+  content: PropTypes.string,
+  onOk: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  children: PropTypes.element.isRequired,
+};
+
 export default ConfirmModal;
