@@ -172,7 +172,7 @@ const Dashboard = () => {
       >
         Manage Vehicles
       </Divider>
-      <div className="dashboard-container pb-5">
+      <div className="dashboard-container vehicleCard px-4 pb-5">
         {vehicleSampleData.map((vehicle) => {
           return <VehicleCard key={vehicle.vehicleNo} data={vehicle} />;
         })}
