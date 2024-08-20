@@ -30,6 +30,7 @@ const VehicleCard = ({ data }) => {
       <Card
         hoverable
         bordered
+        style={{border: "1px solid #cbcbcb"}}
         cover={<img alt="example" src={data.imgURL?data.imgURL:"/truck.jpg"} />}
         actions={[
           <EditFilled

@@ -179,7 +179,7 @@ const Dashboard = () => {
 
         <button
           className="bg-light rounded d-flex align-items-center justify-content-center"
-          style={{ border: "2px dashed #d6d6d6", minHeight: 150 }}
+          style={{ border: "2px dashed #cbcbcb", minHeight: 150 }}
           onClick={callVehicleModal}
         >
           <PlusCircleFilled style={{ fontSize: 76, color: "#d6d6d6" }} />
