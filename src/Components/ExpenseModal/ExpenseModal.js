@@ -22,15 +22,6 @@ const ExpenseModal = forwardRef(({ addExpense, category, formFields }, ref) => {
     showModal,
   }));
 
-  const normFile = (e) => {
-    console.log(e);
-
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
-  };
-
   const submitDetails = async () => {
     try {
       const values = await form.validateFields(); // Validate and get form values
@@ -53,6 +44,7 @@ const ExpenseModal = forwardRef(({ addExpense, category, formFields }, ref) => {
               label={field.label}
               name={field.name}
               rules={field.rules}
+              defaultValue={dayjs()}
             >
               <DatePicker defaultValue={dayjs()} />
             </Form.Item>
@@ -93,6 +85,13 @@ const ExpenseModal = forwardRef(({ addExpense, category, formFields }, ref) => {
     });
   };
 
+  const initialValues = formFields.reduce((acc, field) => {
+    if (field.type === 'date') {
+      acc[field.name] = dayjs(); // Set default date value here
+    }
+    return acc;
+  }, {});
+
   return (
     <>
       <Modal
@@ -115,6 +114,7 @@ const ExpenseModal = forwardRef(({ addExpense, category, formFields }, ref) => {
           wrapperCol={{ flex: 1 }}
           colon={false}
           style={{ maxWidth: 600, marginTop: 50 }}
+          initialValues={initialValues} 
         >
           {renderFormFields()}
         </Form>
