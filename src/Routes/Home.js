@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Route, Routes as Switch } from 'react-router-dom'
+import { Navigate, Route, Routes as Switch } from 'react-router-dom'
 import { UserContext } from '../App'
 import Dashboard from '../Pages/Dashboard/Dashboard'
 import NavBar from '../Components/NavBar/NavBar'
@@ -16,7 +16,7 @@ const Home = () => {
                 <Route path="/dashboard" element={<Dashboard />} />
                 {/* <Route path="/expenseSummary" element={<ExpenseSummary />} /> */}
                 <Route path="/expenseSummary/:vehicleRegistrationNo/:catalog" element={<ExpenseSummary />} />
-                <Route path="/*" element={<Dashboard />} />
+                <Route path="/*"  element={<Navigate to="/dashboard" replace />} />
             </Switch>
         </div>
     )

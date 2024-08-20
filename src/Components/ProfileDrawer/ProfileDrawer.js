@@ -1,8 +1,9 @@
-import { Divider, Drawer, Modal } from "antd";
+import { Divider, Drawer, FloatButton, Modal } from "antd";
 import React, { createContext, useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { jwtDecode } from "jwt-decode";
+import { CloseOutlined } from '@ant-design/icons';
 const ReachableContext = createContext(null);
 const UnreachableContext = createContext(null);
 
@@ -120,6 +121,16 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
           </div>
         </div>
       </div>
+    <FloatButton
+      shape="circle"
+      type="primary"
+      style={{
+        insetInlineEnd: 16,
+        top:16,
+      }}
+      onClick={onProfileClose}
+      icon={<CloseOutlined />}
+    />
     </Drawer>
   );
 };

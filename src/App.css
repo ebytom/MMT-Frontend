@@ -50,13 +50,12 @@
   grid-template-columns: repeat(
     auto-fill,
     minmax(200px, 1fr)
-  ); /* Adjust 200px to the minimum width of your cards */
-  gap: 20px; /* Small space between cards */
+  );
+  gap: 20px; 
   margin-top: 40px;
-  /* padding: 10px; Optional padding if you want space around the grid */
 }
 
-/* Optional: Adjust grid template columns for different screen sizes */
+
 @media (min-width: 768px) {
   /* For tablets and above */
   .dashboard-container {
