@@ -196,9 +196,9 @@ const formFields = {
     { type: 'select', name: 'category', label: 'Category', placeholder: 'Choose category', rules: [{ required: true, message: 'Please select a category' }], options: [
         { value: 'toll', label: 'Toll' },
         { value: 'pollution', label: 'Pollution' },
-        { value: 'Insurance', label: 'Insurance' },
+        { value: 'insurance', label: 'Insurance' },
         { value: 'service&Maintenance', label: 'Service & Maintenance' },
-        { value: 'salary', label: 'Salary' },
+        { value: 'salary&incentives', label: 'Salary & Incentives' },
       ]
     },
     {
