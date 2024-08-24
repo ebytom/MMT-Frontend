@@ -21,9 +21,6 @@ const VehicleModal = forwardRef(({ addNewVehicle, vehicleData }, ref) => {
 
   const { user } = useContext(UserContext);
 
-  console.log(vehicleData);
-  
-
   useEffect(() => {
     setLoading(true);
     console.log(vehicleData);
@@ -71,18 +68,19 @@ const VehicleModal = forwardRef(({ addNewVehicle, vehicleData }, ref) => {
       const values = await form.validateFields(); // Validate and get form values
       setContentLoader(true);
       if (vehicleData) {
-        Axios.put("/api/v1/app/truck/updateTruckById", {
-          params: {
-            id: vehicleData?._id,
-          },
+        Axios.put(`/api/v1/app/truck/updateTruckById/${vehicleData?._id}`, {
+          // params: {
+          //   id: vehicleData?._id,
+          // },
+          vehicleData
         })
           .then((res) => {
             console.log(res);
-            setContentLoader(true);
+            setContentLoader(false);
           })
           .catch((err) => {
             setIsError(true);
-            setContentLoader(true);
+            setContentLoader(false);
           });
       } else {
         console.log("user", user);

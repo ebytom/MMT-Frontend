@@ -31,7 +31,8 @@ const VehicleCard = ({ data }) => {
         hoverable
         bordered
         style={{border: "1px solid #cbcbcb"}}
-        cover={<img alt="truck image" height={180} style={{objectFit: 'cover'}} src={data.imgURL?.length!=0?(data.imgURL[0]?.thumbUrl):("./truck.jpg")} />}
+        cover={<img alt="truck image" height={180} style={{objectFit: 'cover'}} src={data && data.imgURL && data.imgURL.length > 0
+          ? data.imgURL[0]?.thumbUrl:'./truck.jpg'} />}
         actions={[
           <EditFilled
             key="edit"
