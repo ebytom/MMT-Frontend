@@ -32,6 +32,12 @@ const tableColumns = {
       key: "cost",
     },
     {
+      title: "Range",
+      width: 100,
+      dataIndex: "range",
+      key: "range",
+    },
+    {
       title: "Milege",
       width: 100,
       dataIndex: "milege",
@@ -58,6 +64,12 @@ const tableColumns = {
       width: 100,
       dataIndex: "currentKM",
       key: "currentKM",
+    },
+    {
+      title: "Range",
+      width: 100,
+      dataIndex: "range",
+      key: "range",
     },
     {
       title: "Litres",

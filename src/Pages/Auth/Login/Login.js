@@ -21,16 +21,20 @@ const Login = ({ setauthenticated }) => {
   const nav = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("token") != null) {
-      setUser(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      console.log(decodedToken); // Log the decoded token if needed
+      setUser(decodedToken);
     }
   }, []);
+
   const login = (credentialResponse) => {
     console.log(credentialResponse);
     const decodedCredentials = jwtDecode(credentialResponse.credential);
     console.log(decodedCredentials);
 
-    setUser(credentialResponse.credential);
+    setUser(decodedCredentials);
     localStorage.setItem("token", credentialResponse.credential);
   };
 

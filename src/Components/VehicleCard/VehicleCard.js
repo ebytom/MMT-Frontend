@@ -31,7 +31,7 @@ const VehicleCard = ({ data }) => {
         hoverable
         bordered
         style={{border: "1px solid #cbcbcb"}}
-        cover={<img alt="example" src={data.imgURL?data.imgURL:"/truck.jpg"} />}
+        cover={<img alt="truck image" height={180} style={{objectFit: 'cover'}} src={data.imgURL?.length!=0?(data.imgURL[0]?.thumbUrl):("./truck.jpg")} />}
         actions={[
           <EditFilled
             key="edit"
@@ -45,10 +45,10 @@ const VehicleCard = ({ data }) => {
           />,
         ]}
       >
-        <Meta title={data.vehicleNo} description={data.desc} style={{height: '80px', overflow:'hidden'}} />
+        <Meta title={data.registrationNo} description={data.desc} style={{height: '80px', overflow:'hidden'}} />
       </Card>
-      <VehicleModal ref={vehicleModalRef} addNewVehicle={addNewVehicle} />
-      <CatalogModal ref={catalogModalRef} regNo={data.vehicleNo} />
+      <VehicleModal ref={vehicleModalRef} addNewVehicle={addNewVehicle} vehicleData={data} />
+      <CatalogModal ref={catalogModalRef} regNo={data.registrationNo} />
     </>
   );
 };

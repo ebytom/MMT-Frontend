@@ -8,28 +8,32 @@ import StatisticCard from "../../Components/StatisticCard/StatisticCard";
 import VehicleCard from "../../Components/VehicleCard/VehicleCard";
 import { PlusCircleFilled } from "@ant-design/icons";
 import VehicleModal from "../../Components/VehicleModal/VehicleModal";
+import LoaderOverlay from "../../Components/LoaderOverlay/LoaderOverlay";
 
 const Dashboard = () => {
-  // useEffect(() => {
-  //     setcontentloader(true)
-  //     Axios.post("/api/v1/service/getMyRequests", {
-  //         userEmail: user.email,
-  //         // requirementId: searchVal
-  //     })
-  //         .then((res) => {
-  //             console.log(res);
-  //             setRequests(res.data.requests.reverse())
-  //             setarrived(true)
-  //             setcontentloader(false)
-  //         })
-  //         .catch((err) => {
-  //             setisError(true)
-  //             setcontentloader(false)
-  //         })
-  //     return () => {
-  //         setRequests([])
-  //     }
-  // }, [])
+  const [contentLoader, setContentLoader] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [trucks, setTrucks] = useState([]);
+  const {user} = useContext(UserContext);
+
+  useEffect(() => {
+    setContentLoader(true);
+    Axios.get(`/api/v1/app/truck/getAllTrucksByUser/${user.sub}`, {
+      params: {
+        userId: user.sub
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        setTrucks(res.data);
+        setContentLoader(false);
+      })
+      .catch((err) => {
+        setIsError(true);
+        setContentLoader(false);
+      });
+    return () => {};
+  }, []);
 
   // const showModal = (requestId) => {
   //     Axios.post('/api/v1/service/getRequestById', {
@@ -94,28 +98,28 @@ const Dashboard = () => {
   const [vehicleSampleData, setVehicleSampleData] = useState([
     {
       imgURL: "/truck.jpg",
-      vehicleNo: "MH12P5678",
+      registrationNo: "MH12P5678",
       chassisNo: "ijkl5678mnop",
       engineNo: "lmn1234",
       desc: "A blue motorcycle perfect for city commutes.",
     },
     {
       imgURL: "/truck.jpg",
-      vehicleNo: "KA03R7890",
+      registrationNo: "KA03R7890",
       chassisNo: "qrst9012uvwx",
       engineNo: "opq5678",
       desc: "A spacious SUV with off-road capabilities. A spacious SUV with off-road capabilities. ",
     },
     {
       imgURL: "/truck.jpg",
-      vehicleNo: "HR26S2345",
+      registrationNo: "HR26S2345",
       chassisNo: "yzab3456cdef",
       engineNo: "stu9012",
       desc: "A white van ideal for family trips.",
     },
     {
       imgURL: "/truck.jpg",
-      vehicleNo: "UP32T6789",
+      registrationNo: "UP32T6789",
       chassisNo: "ghij7890klmn",
       engineNo: "vwx3456",
       desc: "A large bus suitable for group travel.",
@@ -137,6 +141,7 @@ const Dashboard = () => {
 
   return (
     <>
+      <LoaderOverlay isVisible={contentLoader} />
       <div className="dashboard-container">
         <StatisticCard
           title={"Total Expenses"}
@@ -173,8 +178,8 @@ const Dashboard = () => {
         Manage Vehicles
       </Divider>
       <div className="dashboard-container vehicleCard px-4 pb-5">
-        {vehicleSampleData.map((vehicle) => {
-          return <VehicleCard key={vehicle.vehicleNo} data={vehicle} />;
+        {trucks?.map((truck) => {
+          return <VehicleCard key={truck._id} data={truck} />;
         })}
 
         <button
@@ -185,7 +190,7 @@ const Dashboard = () => {
           <PlusCircleFilled style={{ fontSize: 76, color: "#d6d6d6" }} />
         </button>
       </div>
-      <VehicleModal ref={vehicleModalRef} addNewVehicle={addNewVehicle} />
+      <VehicleModal ref={vehicleModalRef} addNewVehicle={addNewVehicle} vehicleData={null}/>
     </>
   );
 };
