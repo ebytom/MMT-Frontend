@@ -11,7 +11,7 @@ import { Axios } from "../../Config/Axios/Axios";
 import LoaderOverlay from "../LoaderOverlay/LoaderOverlay";
 import { UserContext } from "../../App";
 
-const VehicleModal = forwardRef(({ addNewVehicle, vehicleData }, ref) => {
+const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [contentLoader, setContentLoader] = useState(false);
@@ -23,7 +23,6 @@ const VehicleModal = forwardRef(({ addNewVehicle, vehicleData }, ref) => {
 
   useEffect(() => {
     setLoading(true);
-    console.log(vehicleData);
     // if(vehicleData)
     // {
     //   Axios.get("/api/v1/app/truck/getTruckById", {
@@ -69,29 +68,36 @@ const VehicleModal = forwardRef(({ addNewVehicle, vehicleData }, ref) => {
       setContentLoader(true);
       if (vehicleData) {
         Axios.put(`/api/v1/app/truck/updateTruckById/${vehicleData?._id}`, {
-          // params: {
-          //   id: vehicleData?._id,
-          // },
-          vehicleData
+          values,
         })
           .then((res) => {
             console.log(res);
+            const updatedTruck = res.data;
+            setTrucks((prevTrucks) =>              
+              prevTrucks.map((truck) =>
+                truck._id === updatedTruck._id ? updatedTruck : truck
+              )
+            );
+            console.log(trucks);
+            
             setContentLoader(false);
+            form.resetFields();
+            setOpen(false);
           })
           .catch((err) => {
             setIsError(true);
             setContentLoader(false);
           });
       } else {
-        console.log("user", user);
-
         Axios.post("/api/v1/app/truck/addTruck", {
           ...values,
           userId: user.sub,
         })
           .then((res) => {
-            console.log("Response:", res);
-            setContentLoader(false); // Assuming you want to hide the loader after a successful response
+            setTrucks([...trucks, res.data]);
+            setContentLoader(false);
+            form.resetFields();
+            setOpen(false);
           })
           .catch((err) => {
             console.error("Error:", err); // Log the error details for debugging
@@ -135,9 +141,11 @@ const VehicleModal = forwardRef(({ addNewVehicle, vehicleData }, ref) => {
             name="imgURL"
             valuePropName="fileList"
             getValueFromEvent={normFile}
-            initialValue={vehicleData && vehicleData.imgURL && vehicleData.imgURL.length > 0
-              ? [vehicleData.imgURL[0]]:[]}
-            // rules={[{ required: true, message: "Please upload an image" }]}
+            initialValue={
+              vehicleData && vehicleData.imgURL && vehicleData.imgURL.length > 0
+                ? [vehicleData.imgURL[0]]
+                : []
+            }
           >
             <Upload
               action="/upload.do"
@@ -163,7 +171,7 @@ const VehicleModal = forwardRef(({ addNewVehicle, vehicleData }, ref) => {
               },
             ]}
           >
-            <Input />
+            <Input disabled={vehicleData ? true : false} />
           </Form.Item>
           <Form.Item
             label="Chassis Number"

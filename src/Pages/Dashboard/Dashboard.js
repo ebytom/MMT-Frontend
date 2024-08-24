@@ -134,11 +134,6 @@ const Dashboard = () => {
     }
   };
 
-  const addNewVehicle = (newVehicleDetails) => {
-    console.log(newVehicleDetails);
-    setVehicleSampleData((pre) => [...pre, newVehicleDetails]);
-  };
-
   return (
     <>
       <LoaderOverlay isVisible={contentLoader} />
@@ -190,7 +185,7 @@ const Dashboard = () => {
           <PlusCircleFilled style={{ fontSize: 76, color: "#d6d6d6" }} />
         </button>
       </div>
-      <VehicleModal ref={vehicleModalRef} addNewVehicle={addNewVehicle} vehicleData={null}/>
+      <VehicleModal ref={vehicleModalRef} setTrucks={setTrucks} trucks={trucks} vehicleData={null}/>
     </>
   );
 };
