@@ -73,16 +73,16 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
           .then((res) => {
             console.log(res);
             const updatedTruck = res.data;
-            setTrucks((prevTrucks) =>              
-              prevTrucks.map((truck) =>
-                truck._id === updatedTruck._id ? updatedTruck : truck
-              )
-            );
-            console.log(trucks);
-            
+            // setTrucks((prevTrucks) =>
+            //   prevTrucks.map((truck) =>
+            //     truck._id === updatedTruck._id ? updatedTruck : truck
+            //   )
+            // );
+
             setContentLoader(false);
-            form.resetFields();
             setOpen(false);
+            form.resetFields();
+            window.location.reload();
           })
           .catch((err) => {
             setIsError(true);
@@ -148,7 +148,6 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
             }
           >
             <Upload
-              action="/upload.do"
               listType="picture-card"
               maxCount={1}
               showUploadList={{ showRemoveIcon: true }}
