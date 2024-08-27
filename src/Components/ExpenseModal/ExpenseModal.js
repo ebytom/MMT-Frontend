@@ -15,6 +15,8 @@ const ExpenseModal = forwardRef(({ addExpense, category, formFields, apis }, ref
   const [isError, setIsError] = useState(false);
   const [form] = Form.useForm();
 
+
+
 function getApiEndpoints(expenseType) {
     const expense = apis[expenseType];
     if (expense) {
@@ -39,17 +41,16 @@ function getApiEndpoints(expenseType) {
     setContentLoader(true)
     try {
       const values = await form.validateFields();
-      addExpense(values); // Pass the form values to addNewVehicle
       
       Axios.post(`/api/v1/app/${location.pathname.split("/")[3]}/${getApiEndpoints(location.pathname.split("/")[3])}`, {
         ...values,
         truckId: location.pathname.split("/")[2]
       })
       .then((res) => {
-        // setTrucks([...trucks, res.data]);
         setContentLoader(false);
         form.resetFields();
         setOpen(false);
+        window.location.reload()
       })
       .catch((err) => {
         console.error("Error:", err); // Log the error details for debugging

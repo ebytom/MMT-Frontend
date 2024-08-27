@@ -305,8 +305,6 @@ const ExpenseSummary = () => {
     }
   };
 
-  const addExpense = () => {};
-
   return (
     <>
       <LoaderOverlay isVisible={contentLoader} />
@@ -335,7 +333,8 @@ const ExpenseSummary = () => {
       />
       <ExpenseModal
         ref={expenseModalRef}
-        addExpense={addExpense}
+        setExpensesList={setExpensesList}
+        expensesList={expensesList}
         category={expenses[location.pathname.split("/")[3]]}
         formFields={formFields[location.pathname.split("/")[3]]}
         apis={apis}
