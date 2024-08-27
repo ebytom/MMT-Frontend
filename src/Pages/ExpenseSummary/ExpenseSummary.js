@@ -5,6 +5,8 @@ import { PlusOutlined } from "@ant-design/icons";
 import ExpenseModal from "../../Components/ExpenseModal/ExpenseModal";
 import { Axios } from "../../Config/Axios/Axios";
 import LoaderOverlay from "../../Components/LoaderOverlay/LoaderOverlay";
+import { DatePicker, Space } from 'antd';
+const { RangePicker } = DatePicker;
 
 const tableColumns = {
   fuelExpenses: [
@@ -276,6 +278,7 @@ const ExpenseSummary = () => {
   const [contentLoader, setContentLoader] = useState(true);
   const [expensesList, setExpensesList] = useState([]);
   const [isError, setIsError] = useState(false);
+  const [selectedDates, setSelectedDates] = useState([])
 
   const location = useLocation();
   const expenseModalRef = useRef();
@@ -297,7 +300,7 @@ const ExpenseSummary = () => {
         setIsError(true);
         setContentLoader(false);
       });
-  }, []);
+  }, [selectedDates]);
 
   const callExpenseModal = () => {
     if (expenseModalRef.current) {
@@ -305,9 +308,16 @@ const ExpenseSummary = () => {
     }
   };
 
+  const maxDate = new Date();
+
   return (
     <>
       <LoaderOverlay isVisible={contentLoader} />
+      <RangePicker
+        className="mb-4"
+        onChange={(dates)=>setSelectedDates(dates)}
+        disabledDate={(current) => current && current > maxDate}
+      />
       <Table
         columns={tableColumns[location.pathname.split("/")[3]]}
         dataSource={expensesList}

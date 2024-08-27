@@ -123,9 +123,10 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
           </Button>
         }
         open={open}
-        onCancel={() => setOpen(false)}
+        onCancel={() => {setOpen(false); setIsError(false)}}
         loading={loading}
       >
+        {isError && <b className="text-danger">Something went wrong! Check your entry...</b>}
         <Form
           form={form}
           name="imgURL"

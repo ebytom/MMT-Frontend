@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [contentLoader, setContentLoader] = useState(true);
   const [isError, setIsError] = useState(false);
   const [trucks, setTrucks] = useState([]);
+  const [metadata, setMetadata] = useState([]);
   const {user} = useContext(UserContext);
 
   useEffect(() => {
@@ -32,6 +33,22 @@ const Dashboard = () => {
         setIsError(true);
         setContentLoader(false);
       });
+
+      Axios.get(`/api/v1/app/metadata/getMetadataByUserId`, {
+        params: {
+          userId: user.sub
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          setMetadata(res.data);
+          setContentLoader(false);
+        })
+        .catch((err) => {
+          setIsError(true);
+          setContentLoader(false);
+        });
+
     return () => {};
   }, []);
 
@@ -95,37 +112,6 @@ const Dashboard = () => {
   //         })
   // }
 
-  const [vehicleSampleData, setVehicleSampleData] = useState([
-    {
-      imgURL: "/truck.jpg",
-      registrationNo: "MH12P5678",
-      chassisNo: "ijkl5678mnop",
-      engineNo: "lmn1234",
-      desc: "A blue motorcycle perfect for city commutes.",
-    },
-    {
-      imgURL: "/truck.jpg",
-      registrationNo: "KA03R7890",
-      chassisNo: "qrst9012uvwx",
-      engineNo: "opq5678",
-      desc: "A spacious SUV with off-road capabilities. A spacious SUV with off-road capabilities. ",
-    },
-    {
-      imgURL: "/truck.jpg",
-      registrationNo: "HR26S2345",
-      chassisNo: "yzab3456cdef",
-      engineNo: "stu9012",
-      desc: "A white van ideal for family trips.",
-    },
-    {
-      imgURL: "/truck.jpg",
-      registrationNo: "UP32T6789",
-      chassisNo: "ghij7890klmn",
-      engineNo: "vwx3456",
-      desc: "A large bus suitable for group travel.",
-    },
-  ]);
-
   const vehicleModalRef = useRef();
 
   const callVehicleModal = () => {
@@ -140,28 +126,28 @@ const Dashboard = () => {
       <div className="dashboard-container">
         <StatisticCard
           title={"Total Expenses"}
-          value={200000}
-          thisMonth={5657}
+          value={metadata.grandTotal}
+          thisMonth={metadata.monthlyExpenses?.monthlyGrandTotal}
         />
         <StatisticCard
           title={"Total Fuel Expenses"}
-          value={200000}
-          thisMonth={8767}
+          value={metadata.fuelTotal}
+          thisMonth={metadata.monthlyExpenses?.fuel}
         />
         <StatisticCard
           title={"Total Def Expenses"}
-          value={3767}
-          thisMonth={9879}
+          value={metadata.defTotal}
+          thisMonth={metadata.monthlyExpenses?.def}
         />
         <StatisticCard
           title={"Total Other Expenses"}
-          value={767647}
-          thisMonth={7567}
+          value={metadata.otherTotal}
+          thisMonth={metadata.monthlyExpenses?.other}
         />
         <StatisticCard
           title={"Total Fuel Used"}
-          value={666644}
-          thisMonth={8868}
+          value={metadata.fuelUsedTotal}
+          thisMonth={metadata.monthlyExpenses?.fuelUsed}
         />
       </div>
       <Divider
