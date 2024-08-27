@@ -1,9 +1,12 @@
 import { Divider, Drawer, FloatButton, Modal } from "antd";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { jwtDecode } from "jwt-decode";
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined } from "@ant-design/icons";
+import GetHelpModal from "../GetHelpModal/GetHelpModal";
+import PrivacyPolicyModal from "../PrivacyPolicyModal/PrivacyPolicyModal";
+import AboutUsModal from "../AboutUsModal/AboutUsModal";
 const ReachableContext = createContext(null);
 const UnreachableContext = createContext(null);
 
@@ -19,14 +22,9 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
     setProfileOpen(false);
   };
 
-  //   const signout = async () => {
-  //     console.log("Confirmed: ", confirmed);
-  //     if (confirmed) {
-  //       googleLogout();
-  //       localStorage.removeItem("token");
-  //       window.location.reload();
-  //     }
-  //   };
+  const getHelpRef = useRef();
+  const privacyPolicyRef = useRef();
+  const aboutUsRef = useRef();
 
   const handleOk = () => {
     googleLogout();
@@ -34,8 +32,22 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
     window.location.reload();
   };
 
-  const handleCancel = () => {
-    console.log("Cancel clicked");
+  const callGetHelpModal = () => {
+    if (getHelpRef.current) {
+      getHelpRef.current.showModal();
+    }
+  };
+
+  const callPrivacyPolicyModal = () => {
+    if (privacyPolicyRef.current) {
+      privacyPolicyRef.current.showModal();
+    }
+  };
+
+  const callAboutUsModal = () => {
+    if (aboutUsRef.current) {
+      aboutUsRef.current.showModal();
+    }
   };
 
   return (
@@ -70,6 +82,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
             <button
               type="button"
               className="btn btn-outline-primary btn-floating"
+              onClick={callGetHelpModal}
             >
               {/* <WechatOutlined /> */}
               Get Help
@@ -77,6 +90,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
             <button
               type="button"
               className="btn btn-outline-primary btn-floating"
+              onClick={callPrivacyPolicyModal}
             >
               {/* <AlertFillIcon/> */}
               Privacy Policy
@@ -84,6 +98,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
             <button
               type="button"
               className="btn btn-outline-primary btn-floating"
+              onClick={callAboutUsModal}
             >
               {/* <BookmarkFillIcon/> */}
               About Us
@@ -94,7 +109,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
               title="Confirm Action"
               content="Are you sure you want to signout?"
               onOk={handleOk}
-              onCancel={handleCancel}
+              onCancel={null}
             >
               <button
                 type="button"
@@ -121,16 +136,19 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
           </div>
         </div>
       </div>
-    <FloatButton
-      shape="circle"
-      type="primary"
-      style={{
-        insetInlineEnd: 16,
-        top:16,
-      }}
-      onClick={onProfileClose}
-      icon={<CloseOutlined />}
-    />
+      <FloatButton
+        shape="circle"
+        type="primary"
+        style={{
+          insetInlineEnd: 16,
+          top: 16,
+        }}
+        onClick={onProfileClose}
+        icon={<CloseOutlined />}
+      />
+      <GetHelpModal ref={getHelpRef} />
+      <PrivacyPolicyModal ref={privacyPolicyRef} />
+      <AboutUsModal ref={aboutUsRef} />
     </Drawer>
   );
 };
