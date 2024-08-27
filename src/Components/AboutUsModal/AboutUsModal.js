@@ -27,7 +27,7 @@ const AboutUsModal = forwardRef(({}, ref) => {
           maintenance, and more. MMT provides an intuitive interface
           for efficient truck management.
         </p>
-        <h4>Features</h4>
+        <h5>Features</h5>
         <ul>
           <li>
             <strong>Expense Tracking:</strong> Monitor and categorize all your

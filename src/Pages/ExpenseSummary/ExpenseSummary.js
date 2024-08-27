@@ -268,18 +268,10 @@ const ExpenseSummary = () => {
   const [contentLoader, setContentLoader] = useState(true);
   const [expensesList, setExpensesList] = useState([]);
   const [isError, setIsError] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDates, setSelectedDates] = useState([dayjs().subtract(1, "month"),dayjs()]);
 
   const location = useLocation();
   const expenseModalRef = useRef();
-
-  useEffect(() => {
-    // const today = moment();
-    // const startOfLastMonth = moment().subtract(1, "month");
-    const today = dayjs();
-    const startOfLastMonth = today.subtract(1, "month");
-    setSelectedDates([startOfLastMonth, today]);
-  }, []);
 
   useEffect(() => {
     console.log(selectedDates);
