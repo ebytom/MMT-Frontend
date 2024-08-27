@@ -63,7 +63,7 @@ const NavBar = () => {
           </Button>
           <div>
             <b className="text-white fw-800 fs-5">{`${
-              truckDetails
+              truckDetails.registrationNo
                 ? truckDetails.registrationNo
                 : loc.pathname.split("/")[2]
             } - ${expenses[loc.pathname.split("/")[3]]}`}</b>

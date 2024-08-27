@@ -5,7 +5,9 @@ import { PlusOutlined } from "@ant-design/icons";
 import ExpenseModal from "../../Components/ExpenseModal/ExpenseModal";
 import { Axios } from "../../Config/Axios/Axios";
 import LoaderOverlay from "../../Components/LoaderOverlay/LoaderOverlay";
-import { DatePicker, Space } from 'antd';
+import { DatePicker, Space } from "antd";
+// import moment from "moment";
+import dayjs from "dayjs";
 const { RangePicker } = DatePicker;
 
 const tableColumns = {
@@ -223,50 +225,38 @@ const formFields = {
 
 const apis = {
   fuelExpenses: {
-      addAPI: "addFuelExpense",
-      updateAPI: "updateFuelExpense",
-      getAllExpenses: "getAllFuelExpensesByTruckId"
+    addAPI: "addFuelExpense",
+    updateAPI: "updateFuelExpense",
+    getAllExpenses: "getAllFuelExpensesByTruckId",
   },
   defExpenses: {
-      addAPI: "addDefExpense",
-      updateAPI: "updateDefExpense",
-      getAllExpenses:"getAllDefExpensesByTruckId"
+    addAPI: "addDefExpense",
+    updateAPI: "updateDefExpense",
+    getAllExpenses: "getAllDefExpensesByTruckId",
   },
   otherExpenses: {
-      addAPI: "addOtherExpense",
-      updateAPI: "updateOtherExpense",
-      getAllExpenses:"getAllOtherExpensesByTruckId"
-  }
+    addAPI: "addOtherExpense",
+    updateAPI: "updateOtherExpense",
+    getAllExpenses: "getAllOtherExpensesByTruckId",
+  },
 };
 
 function getAddApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
-      return expense.addAPI;
+    return expense.addAPI;
   } else {
-      throw new Error(`Invalid expense type: ${expenseType}`);
+    throw new Error(`Invalid expense type: ${expenseType}`);
   }
 }
 
 function getAllApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
-      return expense.getAllExpenses;
+    return expense.getAllExpenses;
   } else {
-      throw new Error(`Invalid expense type: ${expenseType}`);
+    throw new Error(`Invalid expense type: ${expenseType}`);
   }
-}
-
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i,
-    date: `Edward ${i}`,
-    currentKM: 32,
-    cost: 32,
-    mileage: 32,
-    litres: `London Park no. ${i}`,
-  });
 }
 
 const ExpenseSummary = () => {
@@ -278,27 +268,41 @@ const ExpenseSummary = () => {
   const [contentLoader, setContentLoader] = useState(true);
   const [expensesList, setExpensesList] = useState([]);
   const [isError, setIsError] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([])
+  const [selectedDates, setSelectedDates] = useState([]);
 
   const location = useLocation();
   const expenseModalRef = useRef();
-  
 
   useEffect(() => {
+    // const today = moment();
+    // const startOfLastMonth = moment().subtract(1, "month");
+    const today = dayjs();
+    const startOfLastMonth = today.subtract(1, "month");
+    setSelectedDates([startOfLastMonth, today]);
+  }, []);
+
+  useEffect(() => {
+    console.log(selectedDates);
+
     setContentLoader(true);
-    Axios.get(`/api/v1/app/${location.pathname.split("/")[3]}/${getAllApiEndpoints(location.pathname.split("/")[3])}`, {
-      params: {
-        truckId: location.pathname.split("/")[2],
-        selectedDates: selectedDates
-      },
-    })
+    Axios.get(
+      `/api/v1/app/${location.pathname.split("/")[3]}/${getAllApiEndpoints(
+        location.pathname.split("/")[3]
+      )}`,
+      {
+        params: {
+          truckId: location.pathname.split("/")[2],
+          selectedDates: selectedDates,
+        },
+      }
+    )
       .then((res) => {
         console.log(res);
         setExpensesList(res.data);
         setContentLoader(false);
       })
       .catch((err) => {
-        setExpensesList([])
+        setExpensesList([]);
         setIsError(true);
         setContentLoader(false);
       });
@@ -318,8 +322,9 @@ const ExpenseSummary = () => {
       <RangePicker
         className="mb-4"
         format="YYYY/MM/DD"
-        onChange={(dates)=>setSelectedDates(dates)}
+        onChange={(dates) => setSelectedDates(dates)}
         disabledDate={(current) => current && current > maxDate}
+        value={selectedDates?.length ? selectedDates : [dayjs(), dayjs()]}
       />
       <Table
         columns={tableColumns[location.pathname.split("/")[3]]}
