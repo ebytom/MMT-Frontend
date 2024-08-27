@@ -4,7 +4,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { AppsIcon, FlameIcon, LogIcon } from "@primer/octicons-react";
 import { useNavigate } from "react-router-dom";
 
-const CatalogModal = forwardRef(({ regNo }, ref) => {
+const CatalogModal = forwardRef(({ vehicleId }, ref) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +26,7 @@ const CatalogModal = forwardRef(({ regNo }, ref) => {
   return (
     <>
       <Modal
-        title={regNo}
+        title={vehicleId}
         open={open}
         footer={null}
         onCancel={() => setOpen(false)}
@@ -43,7 +43,7 @@ const CatalogModal = forwardRef(({ regNo }, ref) => {
             display: "flex",
             justifyContent: "space-between",
           }}
-          onClick={()=>navigate(`/expenseSummary/${regNo}/fuelExpenses`)}
+          onClick={()=>navigate(`/expenseSummary/${vehicleId}/fuelExpenses`)}
         >
           <div className="d-flex align-items-center p-2">
           <FlameIcon size={24} />
@@ -63,7 +63,7 @@ const CatalogModal = forwardRef(({ regNo }, ref) => {
             display: "flex",
             justifyContent: "space-between",
           }}
-          onClick={()=>navigate(`/expenseSummary/${regNo}/defExpenses`)}
+          onClick={()=>navigate(`/expenseSummary/${vehicleId}/defExpenses`)}
         >
           <div className="d-flex align-items-center p-2">
           <AppsIcon size={22} />
@@ -83,7 +83,7 @@ const CatalogModal = forwardRef(({ regNo }, ref) => {
             display: "flex",
             justifyContent: "space-between",
           }}
-          onClick={()=>navigate(`/expenseSummary/${regNo}/otherExpenses`)}
+          onClick={()=>navigate(`/expenseSummary/${vehicleId}/otherExpenses`)}
         >
           <div className="d-flex align-items-center p-2">
             <LogIcon size={22} />

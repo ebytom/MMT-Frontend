@@ -49,7 +49,7 @@ const VehicleCard = ({ data }) => {
         <Meta title={data.registrationNo} description={data.desc} style={{height: '80px', overflow:'hidden'}} />
       </Card>
       <VehicleModal ref={vehicleModalRef} addNewVehicle={addNewVehicle} vehicleData={data} />
-      <CatalogModal ref={catalogModalRef} regNo={data.registrationNo} />
+      <CatalogModal ref={catalogModalRef} vehicleId={data._id} />
     </>
   );
 };

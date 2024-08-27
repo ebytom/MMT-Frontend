@@ -1,8 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FloatButton, Table } from "antd";
 import { useLocation } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import ExpenseModal from "../../Components/ExpenseModal/ExpenseModal";
+import { Axios } from "../../Config/Axios/Axios";
+import LoaderOverlay from "../../Components/LoaderOverlay/LoaderOverlay";
 
 const tableColumns = {
   fuelExpenses: [
@@ -38,10 +40,10 @@ const tableColumns = {
       key: "range",
     },
     {
-      title: "Milege",
+      title: "Mileage",
       width: 100,
-      dataIndex: "milege",
-      key: "milege",
+      dataIndex: "mileage",
+      key: "mileage",
     },
     {
       title: "Action",
@@ -128,7 +130,7 @@ const tableColumns = {
 };
 
 const formFields = {
-  "fuelExpenses": [
+  fuelExpenses: [
     {
       type: "date",
       name: "date",
@@ -143,7 +145,7 @@ const formFields = {
     },
     {
       type: "input",
-      name: "fuelLitres",
+      name: "litres",
       label: "Fuel Litres",
       rules: [
         { required: true, message: "Please enter the litres of fuel filled" },
@@ -151,13 +153,13 @@ const formFields = {
     },
     {
       type: "input",
-      name: "fuelCost",
+      name: "cost",
       label: "Fuel Cost",
       rules: [{ required: true, message: "Please enter the cost of fuel" }],
     },
     { type: "input", name: "note", label: "Note" },
   ],
-  "defExpenses": [
+  defExpenses: [
     {
       type: "date",
       name: "date",
@@ -172,7 +174,7 @@ const formFields = {
     },
     {
       type: "input",
-      name: "defLitres",
+      name: "litres",
       label: "Def Litres",
       rules: [
         { required: true, message: "Please enter the litres of def filled" },
@@ -180,26 +182,32 @@ const formFields = {
     },
     {
       type: "input",
-      name: "defCost",
+      name: "cost",
       label: "Def Cost",
       rules: [{ required: true, message: "Please enter the cost of def" }],
     },
     { type: "input", name: "note", label: "Note" },
   ],
-  "otherExpenses": [
+  otherExpenses: [
     {
       type: "date",
       name: "date",
       label: "Choose Date",
       rules: [{ required: true, message: "Please choose the date" }],
     },
-    { type: 'select', name: 'category', label: 'Category', placeholder: 'Choose category', rules: [{ required: true, message: 'Please select a category' }], options: [
-        { value: 'toll', label: 'Toll' },
-        { value: 'pollution', label: 'Pollution' },
-        { value: 'insurance', label: 'Insurance' },
-        { value: 'service&Maintenance', label: 'Service & Maintenance' },
-        { value: 'salary&incentives', label: 'Salary & Incentives' },
-      ]
+    {
+      type: "select",
+      name: "category",
+      label: "Category",
+      placeholder: "Choose category",
+      rules: [{ required: true, message: "Please select a category" }],
+      options: [
+        { value: "toll", label: "Toll" },
+        { value: "pollution", label: "Pollution" },
+        { value: "insurance", label: "Insurance" },
+        { value: "service&Maintenance", label: "Service & Maintenance" },
+        { value: "salary&incentives", label: "Salary & Incentives" },
+      ],
     },
     {
       type: "input",
@@ -211,6 +219,42 @@ const formFields = {
   ],
 };
 
+const apis = {
+  fuelExpenses: {
+      addAPI: "addFuelExpense",
+      updateAPI: "updateFuelExpense",
+      getAllExpenses: "getAllFuelExpensesByTruckId"
+  },
+  defExpenses: {
+      addAPI: "addDefExpense",
+      updateAPI: "updateDefExpense",
+      getAllExpenses:"getAllDefExpensesByTruckId"
+  },
+  otherExpenses: {
+      addAPI: "addOtherExpense",
+      updateAPI: "updateOtherExpense",
+      getAllExpenses:"getAllOtherExpensesByTruckId"
+  }
+};
+
+function getAddApiEndpoints(expenseType) {
+  const expense = apis[expenseType];
+  if (expense) {
+      return expense.addAPI;
+  } else {
+      throw new Error(`Invalid expense type: ${expenseType}`);
+  }
+}
+
+function getAllApiEndpoints(expenseType) {
+  const expense = apis[expenseType];
+  if (expense) {
+      return expense.getAllExpenses;
+  } else {
+      throw new Error(`Invalid expense type: ${expenseType}`);
+  }
+}
+
 const data = [];
 for (let i = 0; i < 100; i++) {
   data.push({
@@ -218,7 +262,7 @@ for (let i = 0; i < 100; i++) {
     date: `Edward ${i}`,
     currentKM: 32,
     cost: 32,
-    milege: 32,
+    mileage: 32,
     litres: `London Park no. ${i}`,
   });
 }
@@ -229,9 +273,31 @@ const ExpenseSummary = () => {
     defExpenses: "Def Expenses",
     otherExpenses: "Other Expenses",
   });
+  const [contentLoader, setContentLoader] = useState(true);
+  const [expensesList, setExpensesList] = useState([]);
+  const [isError, setIsError] = useState(false);
 
   const location = useLocation();
   const expenseModalRef = useRef();
+  
+
+  useEffect(() => {
+    setContentLoader(true);
+    Axios.get(`/api/v1/app/${location.pathname.split("/")[3]}/${getAllApiEndpoints(location.pathname.split("/")[3])}`, {
+      params: {
+        truckId: location.pathname.split("/")[2],
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        setExpensesList(res.data);
+        setContentLoader(false);
+      })
+      .catch((err) => {
+        setIsError(true);
+        setContentLoader(false);
+      });
+  }, []);
 
   const callExpenseModal = () => {
     if (expenseModalRef.current) {
@@ -243,9 +309,10 @@ const ExpenseSummary = () => {
 
   return (
     <>
+      <LoaderOverlay isVisible={contentLoader} />
       <Table
         columns={tableColumns[location.pathname.split("/")[3]]}
-        dataSource={data}
+        dataSource={expensesList}
         scroll={{
           x: 1500,
           y: 500,
@@ -271,6 +338,7 @@ const ExpenseSummary = () => {
         addExpense={addExpense}
         category={expenses[location.pathname.split("/")[3]]}
         formFields={formFields[location.pathname.split("/")[3]]}
+        apis={apis}
       />
     </>
   );

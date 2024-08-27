@@ -1,33 +1,61 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { Button, DatePicker, Form, Input, Modal, Select, Upload } from "antd";
 import dayjs from 'dayjs';
+import { Axios } from "../../Config/Axios/Axios";
+import LoaderOverlay from "../LoaderOverlay/LoaderOverlay";
+import { Content } from "antd/es/layout/layout";
+import { useLocation } from "react-router-dom";
 
 const {Option} = Select;
 
-const ExpenseModal = forwardRef(({ addExpense, category, formFields }, ref) => {
+const ExpenseModal = forwardRef(({ addExpense, category, formFields, apis }, ref) => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [contentLoader, setContentLoader] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [form] = Form.useForm();
+
+function getApiEndpoints(expenseType) {
+    const expense = apis[expenseType];
+    if (expense) {
+        return expense.addAPI;
+    } else {
+        throw new Error(`Invalid expense type: ${expenseType}`);
+    }
+}
+
+  const location = useLocation();
 
   const showModal = () => {
     setOpen(true);
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    // setLoading(true);
   };
 
   useImperativeHandle(ref, () => ({
-    showModal,
+    showModal
   }));
 
   const submitDetails = async () => {
+    setContentLoader(true)
     try {
-      const values = await form.validateFields(); // Validate and get form values
-      console.log(values);
-      
+      const values = await form.validateFields();
       addExpense(values); // Pass the form values to addNewVehicle
+      
+      Axios.post(`/api/v1/app/${location.pathname.split("/")[3]}/${getApiEndpoints(location.pathname.split("/")[3])}`, {
+        ...values,
+        truckId: location.pathname.split("/")[2]
+      })
+      .then((res) => {
+        // setTrucks([...trucks, res.data]);
+        setContentLoader(false);
+        form.resetFields();
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.error("Error:", err); // Log the error details for debugging
+        setIsError(true);
+        setContentLoader(false); // Hide the loader after an error
+      });
       setOpen(false); // Close the modal on successful submission
     } catch (error) {
       console.error("Form submission failed:", error);
@@ -94,6 +122,7 @@ const ExpenseModal = forwardRef(({ addExpense, category, formFields }, ref) => {
 
   return (
     <>
+    <LoaderOverlay isVisible={contentLoader}/>
       <Modal
         title={`Add ${category}`}
         footer={
