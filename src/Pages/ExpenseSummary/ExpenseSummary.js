@@ -289,6 +289,7 @@ const ExpenseSummary = () => {
     Axios.get(`/api/v1/app/${location.pathname.split("/")[3]}/${getAllApiEndpoints(location.pathname.split("/")[3])}`, {
       params: {
         truckId: location.pathname.split("/")[2],
+        selectedDates: selectedDates
       },
     })
       .then((res) => {
@@ -315,6 +316,7 @@ const ExpenseSummary = () => {
       <LoaderOverlay isVisible={contentLoader} />
       <RangePicker
         className="mb-4"
+        format="YYYY/MM/DD"
         onChange={(dates)=>setSelectedDates(dates)}
         disabledDate={(current) => current && current > maxDate}
       />
