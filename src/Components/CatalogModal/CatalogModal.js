@@ -5,7 +5,7 @@ import { AppsIcon, FlameIcon, LogIcon } from "@primer/octicons-react";
 import { useNavigate } from "react-router-dom";
 import { Axios } from "../../Config/Axios/Axios";
 
-const CatalogModal = forwardRef(({ vehicleId }, ref) => {
+const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({});
@@ -17,14 +17,11 @@ const CatalogModal = forwardRef(({ vehicleId }, ref) => {
     setOpen(true);
     setLoading(true);
 
-    Axios.get(
-      `/api/v1/app/metadata/getMetadataByTruckId`,
-      {
-        params: {
-          truckId: vehicleId,
-        },
-      }
-    )
+    Axios.get(`/api/v1/app/metadata/getMetadataByTruckId`, {
+      params: {
+        truckId: vehicleId,
+      },
+    })
       .then((res) => {
         console.log(res);
         setMetadata(res.data);
@@ -43,7 +40,7 @@ const CatalogModal = forwardRef(({ vehicleId }, ref) => {
   return (
     <>
       <Modal
-        title={vehicleId}
+        title={regNo}
         open={open}
         footer={null}
         onCancel={() => setOpen(false)}

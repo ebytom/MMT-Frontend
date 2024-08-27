@@ -298,6 +298,7 @@ const ExpenseSummary = () => {
         setContentLoader(false);
       })
       .catch((err) => {
+        setExpensesList([])
         setIsError(true);
         setContentLoader(false);
       });
