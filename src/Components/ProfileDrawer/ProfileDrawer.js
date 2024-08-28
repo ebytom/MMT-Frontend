@@ -32,7 +32,6 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
       },
     })
       .then((res) => {
-        console.log(res);
         setMetadata(res.data);
         setLoading(false);
       })
