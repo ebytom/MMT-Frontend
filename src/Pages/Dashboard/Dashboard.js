@@ -26,7 +26,6 @@ const Dashboard = () => {
       },
     })
       .then((res) => {
-        console.log(res);
         setTrucks(res.data);
         setContentLoader(false);
       })
@@ -46,7 +45,6 @@ const Dashboard = () => {
       },
     })
       .then((res) => {
-        console.log(res);
         setMetadata(res.data);
         setAnalyticsLoader(false);
       })

@@ -53,10 +53,8 @@ const Signup = () => {
         })
             .then(async (res) => {
                 const data = await res.json();
-                console.log(data.message);
                 setsuccess(data.message)
                 seterr("")
-                console.log(data);
             })
             .catch((err) => {
                 console.log(err)

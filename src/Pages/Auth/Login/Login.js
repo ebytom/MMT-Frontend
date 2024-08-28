@@ -41,7 +41,6 @@ const Login = ({ setauthenticated }) => {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwtDecode(token);
-      console.log(decodedToken);
       setUser(decodedToken);
     }
   }, []);
@@ -52,10 +51,7 @@ const Login = ({ setauthenticated }) => {
 
       // Send token to backend for verification
       const response = await Axios.post("/api/v1/app/auth/signUpWithGoogle", { token });
-
-      console.log("response", response);
-      
-
+    
       // Handle successful login
       const { user, token: newToken } = response.data;
 

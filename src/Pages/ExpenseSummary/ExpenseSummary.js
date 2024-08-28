@@ -274,8 +274,6 @@ const ExpenseSummary = () => {
   const expenseModalRef = useRef();
 
   useEffect(() => {
-    console.log(selectedDates);
-
     setContentLoader(true);
     Axios.get(
       `/api/v1/app/${location.pathname.split("/")[3]}/${getAllApiEndpoints(
@@ -289,7 +287,6 @@ const ExpenseSummary = () => {
       }
     )
       .then((res) => {
-        console.log(res);
         setExpensesList(res.data);
         setContentLoader(false);
       })
