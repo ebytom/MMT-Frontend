@@ -166,7 +166,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
       </div>
       <FloatButton
         shape="circle"
-        type="primary"
+        type="dark"
         style={{
           insetInlineEnd: 16,
           top: 16,
