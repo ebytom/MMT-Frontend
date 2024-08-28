@@ -49,7 +49,7 @@ const ExpenseModal = forwardRef(
           )}`,
           {
             ...values,
-            addedBy: user.sub,
+            addedBy: user.userId,
             truckId: location.pathname.split("/")[2],
           }
         )

@@ -20,24 +20,53 @@ const Login = ({ setauthenticated }) => {
 
   const nav = useNavigate();
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     const decodedToken = jwtDecode(token);
+  //     console.log(decodedToken); // Log the decoded token if needed
+  //     setUser(decodedToken);
+  //   }
+  // }, []);
+
+  // const login = (credentialResponse) => {
+  //   console.log(credentialResponse);
+  //   const decodedCredentials = jwtDecode(credentialResponse.credential);
+  //   console.log(decodedCredentials);
+
+  //   setUser(decodedCredentials);
+  //   localStorage.setItem("token", credentialResponse.credential);
+  // };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwtDecode(token);
-      console.log(decodedToken); // Log the decoded token if needed
+      console.log(decodedToken);
       setUser(decodedToken);
     }
   }, []);
 
-  const login = (credentialResponse) => {
-    console.log(credentialResponse);
-    const decodedCredentials = jwtDecode(credentialResponse.credential);
-    console.log(decodedCredentials);
+  const login = async (credentialResponse) => {
+    try {
+      const token = credentialResponse.credential;
 
-    setUser(decodedCredentials);
-    localStorage.setItem("token", credentialResponse.credential);
+      // Send token to backend for verification
+      const response = await Axios.post("/api/v1/app/auth/signUpWithGoogle", { token });
+
+      console.log("response", response);
+      
+
+      // Handle successful login
+      const { user, token: newToken } = response.data;
+
+      setUser(user);
+      localStorage.setItem("token", newToken);
+      nav("/dashboard"); // Redirect to dashboard or home page
+    } catch (error) {
+      console.error("Login Failed:", error);
+      seterr("Login Failed. Please try again.");
+    }
   };
-
   //   useEffect(
   //     () => {
   //         if (user) {
@@ -176,7 +205,7 @@ const Login = ({ setauthenticated }) => {
                     <p className="mt-4 mb-4">Contact us</p>
                     <div className="d-flex gap-2 gap-sm-3 justify-content-centerX">
                       <a
-                        href="#!"
+                        href="mailto:dev.codhub@gmail.com"
                         className="btn btn-outline-danger bsb-btn-circle bsb-btn-circle-2xl"
                       >
                         <MailFilled />

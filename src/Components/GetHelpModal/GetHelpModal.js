@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { Button, Modal } from "antd";
 import { MailIcon } from "@primer/octicons-react";
+import { Link } from "react-router-dom";
 
 const GetHelpModal = forwardRef(({}, ref) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,13 +29,18 @@ const GetHelpModal = forwardRef(({}, ref) => {
         footer={null}
       >
         <div className="mt-4">
-        <div className="d-flex align-items-center">
-          <div className="w-25">
-            <MailIcon size={20}/>
-            <b className="ms-2">Email</b>
+          <div className="d-flex align-items-center">
+            <div className="w-25">
+              <MailIcon size={20} />
+              <b className="ms-2">Email</b>
+            </div>
+            <a
+              href="mailto:dev.codhub@gmail.com"
+              style={{ textDecoration: "none" }}
+            >
+              <b style={{ color: "#808080" }}>dev.codhub@gmail.com</b>
+            </a>
           </div>
-          <b style={{color: "#808080"}}>dev.codhub@gmail.com</b>
-        </div>
         </div>
       </Modal>
     </>

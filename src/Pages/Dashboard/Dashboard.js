@@ -20,9 +20,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     setContentLoader(true);
-    Axios.get(`/api/v1/app/truck/getAllTrucksByUser/${user.sub}`, {
+    Axios.get(`/api/v1/app/truck/getAllTrucksByUser/${user.userId}`, {
       params: {
-        userId: user.sub,
+        addedBy: user.userId,
       },
     })
       .then((res) => {
@@ -42,7 +42,7 @@ const Dashboard = () => {
     setAnalyticsLoader(true);
     Axios.get(`/api/v1/app/metadata/getMetadataByUserId`, {
       params: {
-        userId: user.sub,
+        userId: user.userId,
       },
     })
       .then((res) => {

@@ -91,7 +91,7 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
       } else {
         Axios.post("/api/v1/app/truck/addTruck", {
           ...values,
-          userId: user.sub,
+          addedBy: user.userId,
         })
           .then((res) => {
             setTrucks([...trucks, res.data]);

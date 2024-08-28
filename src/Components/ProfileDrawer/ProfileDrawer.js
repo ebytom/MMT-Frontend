@@ -7,15 +7,36 @@ import { CloseOutlined } from "@ant-design/icons";
 import GetHelpModal from "../GetHelpModal/GetHelpModal";
 import PrivacyPolicyModal from "../PrivacyPolicyModal/PrivacyPolicyModal";
 import AboutUsModal from "../AboutUsModal/AboutUsModal";
+import { Axios } from "../../Config/Axios/Axios";
 const ReachableContext = createContext(null);
 const UnreachableContext = createContext(null);
 
 const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
   const [userCredentials, setuserCredentials] = useState(null);
+  const [metadata, setMetadata] = useState({})
+  const [isError, setIsError] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const userCred = jwtDecode(localStorage.getItem("token"));
     setuserCredentials(userCred);
+
+    setLoading(true)
+
+    Axios.get(`/api/v1/app/metadata/getProfileMetadataByUserId`, {
+      params: {
+        userId: userCred?.sub,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        setMetadata(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setIsError(true);
+        setLoading(false);
+      });
   }, []);
 
   const onProfileClose = () => {
@@ -58,6 +79,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
       open={profileOpen}
       style={{ padding: 0 }}
       key={"right"}
+      loading={loading}
     >
       <div className="card" style={{ borderRadius: "6px" }}>
         <div className="card-body text-center">
@@ -122,12 +144,12 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
           <Divider />
           <div className="d-flex justify-content-between text-center mt-3 mb-2">
             <div>
-              <p className="mb-2 h5">8471</p>
-              <p className="text-muted mb-0">Total Revenue</p>
+              <p className="mb-2 h5">{metadata.totalTrucks}</p>
+              <p className="text-muted mb-0">Total Trucks</p>
             </div>
             <div className="px-3">
-              <p className="mb-2 h5">8512</p>
-              <p className="text-muted mb-0">Total Expenses</p>
+              <p className="mb-2 h5">{metadata.totalKM}</p>
+              <p className="text-muted mb-0">Total KM</p>
             </div>
             <div>
               <p className="mb-2 h5">4751</p>
@@ -135,6 +157,9 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="w-100 d-flex justify-content-center mt-4">
+        <p style={{color: "#808080", fontSize: 12}}>Developed with ❤️</p>
       </div>
       <FloatButton
         shape="circle"
