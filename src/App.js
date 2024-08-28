@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div className="d-flex App">
-      <GoogleOAuthProvider clientId="654905880674-dfd1lul50bf5u12a5cqmga32eaffktcs.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_URL}>
         <UserContext.Provider value={{ user, setUser }}>
           <Routes />
         </UserContext.Provider>

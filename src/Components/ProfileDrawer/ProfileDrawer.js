@@ -1,5 +1,5 @@
 import { Divider, Drawer, FloatButton, Modal } from "antd";
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { jwtDecode } from "jwt-decode";
@@ -8,6 +8,7 @@ import GetHelpModal from "../GetHelpModal/GetHelpModal";
 import PrivacyPolicyModal from "../PrivacyPolicyModal/PrivacyPolicyModal";
 import AboutUsModal from "../AboutUsModal/AboutUsModal";
 import { Axios } from "../../Config/Axios/Axios";
+import { UserContext } from "../../App";
 const ReachableContext = createContext(null);
 const UnreachableContext = createContext(null);
 
@@ -17,6 +18,8 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
   const [isError, setIsError] = useState(false)
   const [loading, setLoading] = useState(true)
 
+  const {user} = useContext(UserContext);
+
   useEffect(() => {
     const userCred = jwtDecode(localStorage.getItem("token"));
     setuserCredentials(userCred);
@@ -25,7 +28,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
 
     Axios.get(`/api/v1/app/metadata/getProfileMetadataByUserId`, {
       params: {
-        userId: userCred?.sub,
+        userId: user?.userId,
       },
     })
       .then((res) => {
@@ -152,7 +155,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
               <p className="text-muted mb-0">Total KM</p>
             </div>
             <div>
-              <p className="mb-2 h5">4751</p>
+              <p className="mb-2 h5">{metadata.totalDays}</p>
               <p className="text-muted mb-0">Total Days</p>
             </div>
           </div>
