@@ -161,7 +161,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
         </div>
       </div>
       <div className="w-100 d-flex justify-content-center mt-4">
-        <p style={{color: "#808080", fontSize: 12}}>Developed with ❤️</p>
+        <p style={{color: "#808080", fontSize: 12}}>Developed by codhub</p>
       </div>
       <FloatButton
         shape="circle"
