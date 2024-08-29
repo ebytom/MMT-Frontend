@@ -145,12 +145,14 @@ const formFields = {
       type: "input",
       name: "currentKM",
       label: "Current KM",
+      textType: "number",
       rules: [{ required: true, message: "Please enter the current KM" }],
     },
     {
       type: "input",
       name: "litres",
       label: "Fuel Litres",
+      textType: "number",
       rules: [
         { required: true, message: "Please enter the litres of fuel filled" },
       ],
@@ -159,9 +161,10 @@ const formFields = {
       type: "input",
       name: "cost",
       label: "Fuel Cost",
+      textType: "number",
       rules: [{ required: true, message: "Please enter the cost of fuel" }],
     },
-    { type: "input", name: "note", label: "Note" },
+    { type: "input", name: "note", label: "Note", textType: "text" },
   ],
   defExpenses: [
     {
@@ -174,12 +177,14 @@ const formFields = {
       type: "input",
       name: "currentKM",
       label: "Current KM",
+      textType: "number",
       rules: [{ required: true, message: "Please enter the current KM" }],
     },
     {
       type: "input",
       name: "litres",
       label: "Def Litres",
+      textType: "number",
       rules: [
         { required: true, message: "Please enter the litres of def filled" },
       ],
@@ -188,9 +193,10 @@ const formFields = {
       type: "input",
       name: "cost",
       label: "Def Cost",
+      textType: "number",
       rules: [{ required: true, message: "Please enter the cost of def" }],
     },
-    { type: "input", name: "note", label: "Note" },
+    { type: "input", name: "note", label: "Note", textType: "text" },
   ],
   otherExpenses: [
     {
@@ -217,9 +223,10 @@ const formFields = {
       type: "input",
       name: "cost",
       label: "Cost",
+      textType: "number",
       rules: [{ required: true, message: "Please enter the cost" }],
     },
-    { type: "input", name: "note", label: "Note" },
+    { type: "input", name: "note", label: "Note", textType: "text" },
   ],
 };
 

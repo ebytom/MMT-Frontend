@@ -93,7 +93,7 @@ const ExpenseModal = forwardRef(
                 name={field.name}
                 rules={field.rules}
               >
-                <Input />
+                <Input type={field.textType}/>
               </Form.Item>
             );
           case "select":

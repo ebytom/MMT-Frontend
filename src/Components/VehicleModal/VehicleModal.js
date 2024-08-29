@@ -62,6 +62,14 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
     return e?.fileList;
   };
 
+  const handleUpperCase = (e) => {
+    const { name, value } = e.target;
+
+    form.setFieldsValue({
+      [name]: value.toUpperCase(),
+    });
+  };
+
   const submitDetails = async () => {
     try {
       const values = await form.validateFields(); // Validate and get form values
@@ -122,10 +130,17 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
           </Button>
         }
         open={open}
-        onCancel={() => {setOpen(false); setIsError(false)}}
+        onCancel={() => {
+          setOpen(false);
+          setIsError(false);
+        }}
         loading={loading}
       >
-        {isError && <b className="text-danger">Something went wrong! Check your entry...</b>}
+        {isError && (
+          <b className="text-danger">
+            Something went wrong! Check your entry...
+          </b>
+        )}
         <Form
           form={form}
           name="imgURL"
@@ -170,21 +185,25 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
               },
             ]}
           >
-            <Input disabled={vehicleData ? true : false} />
+            <Input
+              disabled={vehicleData ? true : false}
+              name="registrationNo"
+              onChange={handleUpperCase}
+            />
           </Form.Item>
           <Form.Item
             label="Chassis Number"
             name="chassisNo"
             initialValue={vehicleData ? vehicleData.chassisNo : ""}
           >
-            <Input />
+            <Input name="chassisNo" onChange={handleUpperCase} />
           </Form.Item>
           <Form.Item
             label="Engine Number"
             name="engineNo"
             initialValue={vehicleData ? vehicleData.engineNo : ""}
           >
-            <Input />
+            <Input name="engineNo" onChange={handleUpperCase} />
           </Form.Item>
           <Form.Item
             label="Make"
@@ -205,7 +224,7 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
             name="year"
             initialValue={vehicleData ? vehicleData.year : ""}
           >
-            <Input />
+            <Input type="number" />
           </Form.Item>
           <Form.Item
             label="Description"
