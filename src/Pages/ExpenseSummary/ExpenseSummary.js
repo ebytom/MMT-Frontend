@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FloatButton, Table } from "antd";
+import { ConfigProvider, FloatButton, Table } from "antd";
 import { useLocation } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import ExpenseModal from "../../Components/ExpenseModal/ExpenseModal";
@@ -8,6 +8,11 @@ import LoaderOverlay from "../../Components/LoaderOverlay/LoaderOverlay";
 import { DatePicker, Space } from "antd";
 // import moment from "moment";
 import dayjs from "dayjs";
+// import locale from 'antd/locale/en_GB';
+// import 'dayjs/locale/en-gb';
+
+// dayjs.locale('en-gb'); 
+
 const { RangePicker } = DatePicker;
 
 const tableColumns = {
@@ -275,7 +280,10 @@ const ExpenseSummary = () => {
   const [contentLoader, setContentLoader] = useState(true);
   const [expensesList, setExpensesList] = useState([]);
   const [isError, setIsError] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([dayjs().subtract(1, "month"),dayjs()]);
+  const [selectedDates, setSelectedDates] = useState([
+    dayjs().subtract(1, "month"),
+    dayjs(),
+  ]);
 
   const location = useLocation();
   const expenseModalRef = useRef();
@@ -289,7 +297,7 @@ const ExpenseSummary = () => {
       {
         params: {
           truckId: location.pathname.split("/")[2],
-          selectedDates: selectedDates,
+          selectedDates,
         },
       }
     )
@@ -310,18 +318,27 @@ const ExpenseSummary = () => {
     }
   };
 
-  const maxDate = new Date();
+  const maxDate = new Date();  
+
+  const handleDateChange = (dates) => {
+    if (dates) {
+      const formattedDates = [dates[0].endOf('day').toISOString(), dates[1].endOf('day').toISOString()];
+      setSelectedDates(formattedDates);
+    } else {
+      setSelectedDates([]);
+    }
+  };
 
   return (
     <>
       <LoaderOverlay isVisible={contentLoader} />
-      <RangePicker
-        className="mb-4"
-        format="YYYY/MM/DD"
-        onChange={(dates) => setSelectedDates(dates)}
-        disabledDate={(current) => current && current > maxDate}
-        value={selectedDates?.length ? selectedDates : [dayjs(), dayjs()]}
-      />
+        <RangePicker
+          className="mb-4"
+          format="YYYY-MM-DD"
+          onChange={handleDateChange}
+          disabledDate={(current) => current && current > maxDate}
+          value={selectedDates?.length ? [dayjs(selectedDates[0]),dayjs(selectedDates[1])] : [dayjs(), dayjs()]}
+        />
       <Table
         columns={tableColumns[location.pathname.split("/")[3]]}
         dataSource={expensesList}
