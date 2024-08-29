@@ -26,7 +26,6 @@ const NavBar = () => {
     if (loc.pathname.split("/")[2]) {
       Axios.get(`/api/v1/app/truck/getTruckById/${loc.pathname.split("/")[2]}`)
         .then((res) => {
-          console.log(res);
           setTruckDetails(res.data);
         })
         .catch((err) => {

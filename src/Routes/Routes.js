@@ -1,29 +1,33 @@
 import React, { useContext } from 'react'
-import { BrowserRouter, Route, Routes as Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './Home'
 import Login from '../Pages/Auth/Login/Login'
 import { UserContext } from '../App'
 import Signup from '../Pages/Auth/Signup/Signup'
+import UnauthorizedAccess from '../Pages/UnauthorizedAccess/UnauthorizedAccess'
 
-const Routes = () => {
-
+const AppRoutes = () => {
     const { user } = useContext(UserContext)
+
     return (
         <BrowserRouter>
-            {
-                user ?
-                    <Switch>
+            <Routes>
+                {user ? (
+                    user.isSubscribed ? (
                         <Route path="/*" element={<Home />} />
-                    </Switch>
-                    :
-                    <Switch>
+                    ) : (
+                        <Route path="/*" element={<UnauthorizedAccess />} />
+                    )
+                ) : (
+                    <>
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
                         <Route path="/*" element={<Login />} />
-                    </Switch>
-            }
+                    </>
+                )}
+            </Routes>
         </BrowserRouter>
     )
 }
 
-export default Routes
+export default AppRoutes

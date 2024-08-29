@@ -37,13 +37,36 @@ const Login = ({ setauthenticated }) => {
   //   setUser(decodedCredentials);
   //   localStorage.setItem("token", credentialResponse.credential);
   // };
+
+
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     const decodedToken = jwtDecode(token);
+  //     setUser(decodedToken);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      setUser(decodedToken);
+    if (localStorage.getItem("token") != null) {
+        Axios.post("/api/v1/app/auth/whoami", {}, {
+            headers: {
+                'authorization': `beare ${localStorage.getItem("token")}`
+            }
+        })
+            .then((res) => {
+              console.log(res);
+              
+                    setUser(res.data.user)
+            })
+            .catch((err) => {
+                console.log(err);
+                seterr("Session Expired! login again...")
+                sessionStorage.removeItem("token")
+            })
     }
-  }, []);
+}, [])
 
   const login = async (credentialResponse) => {
     try {

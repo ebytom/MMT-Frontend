@@ -71,7 +71,6 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
           values,
         })
           .then((res) => {
-            console.log(res);
             const updatedTruck = res.data;
             // setTrucks((prevTrucks) =>
             //   prevTrucks.map((truck) =>
