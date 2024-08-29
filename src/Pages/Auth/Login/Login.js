@@ -63,7 +63,7 @@ const Login = ({ setauthenticated }) => {
             .catch((err) => {
                 console.log(err);
                 seterr("Session Expired! login again...")
-                sessionStorage.removeItem("token")
+                localStorage.removeItem("token")
             })
     }
 }, [])
