@@ -37,7 +37,7 @@ const UnauthorizedAccess = () => {
               title="Confirm Action"
               content="Are you sure you want to signout?"
               onOk={handleOk}
-              onCancel={null}
+              onCancel={()=>{}}
             >
               <Button type="primary" danger>
                 Signout
@@ -46,7 +46,6 @@ const UnauthorizedAccess = () => {
             <GetHelpModal ref={getHelpRef} />
           </div>
         }
-        //   style={{ marginTop: "100px" }}
       />
     </div>
   );

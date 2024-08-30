@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Divider, Drawer, Radio, Space } from "antd";
+import { Button, Space } from "antd";
 import { MenuFoldOutlined, LeftOutlined } from "@ant-design/icons";
-import { Menu, Switch } from "antd";
 import { PersonIcon } from "@primer/octicons-react";
 import ProfileDrawer from "../ProfileDrawer/ProfileDrawer";
 import MenuDrawer from "../MenuDrawer/MenuDrawer";
@@ -23,8 +22,9 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loc.pathname.split("/")[2]) {
-      Axios.get(`/api/v1/app/truck/getTruckById/${loc.pathname.split("/")[2]}`)
+    const truckId = loc.pathname.split("/")[2];
+    if (truckId) {
+      Axios.get(`/api/v1/app/truck/getTruckById/${truckId}`)
         .then((res) => {
           setTruckDetails(res.data);
         })
@@ -33,7 +33,7 @@ const NavBar = () => {
           setIsError(true);
         });
     }
-  }, []);
+  }, [loc.pathname]);
 
   const showNavDrawer = () => {
     setNavOpen(true);
@@ -42,6 +42,8 @@ const NavBar = () => {
   const showProfileDrawer = () => {
     setProfileOpen(true);
   };
+
+  const registrationNo = truckDetails.registrationNo;
 
   return (
     <div className="mb-4">
@@ -61,11 +63,9 @@ const NavBar = () => {
             <LeftOutlined style={{ color: "white", fontSize: 18 }} />
           </Button>
           <div>
-            <b className="text-white fw-800 fs-5">{`${
-              truckDetails.registrationNo
-                ? truckDetails.registrationNo
-                : loc.pathname.split("/")[2]
-            } - ${expenses[loc.pathname.split("/")[3]]}`}</b>
+            <b className="text-white fw-800 fs-5">
+              {registrationNo ? registrationNo : "Truck"} - {expenses[loc.pathname.split("/")[3]]}
+            </b>
           </div>
           <div></div>
         </Space>
@@ -104,11 +104,9 @@ const NavBar = () => {
       )}
 
       <MenuDrawer navOpen={navOpen} setNavOpen={setNavOpen} />
-      <ProfileDrawer
-        profileOpen={profileOpen}
-        setProfileOpen={setProfileOpen}
-      />
+      <ProfileDrawer profileOpen={profileOpen} setProfileOpen={setProfileOpen} />
     </div>
   );
 };
+
 export default NavBar;

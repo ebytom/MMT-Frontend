@@ -276,7 +276,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
-            onCancel={null}
+            onCancel={()=>{}}
           >
             <button
               type="button"
@@ -330,7 +330,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
-            onCancel={null}
+            onCancel={()=>{}}
           >
             <button
               type="button"
@@ -378,7 +378,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
-            onCancel={null}
+            onCancel={()=>{}}
           >
             <button
               type="button"

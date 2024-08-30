@@ -133,7 +133,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
               title="Confirm Action"
               content="Are you sure you want to signout?"
               onOk={handleOk}
-              onCancel={null}
+              onCancel={()=>{}}
             >
               <button
                 type="button"
