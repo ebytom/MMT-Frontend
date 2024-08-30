@@ -13,7 +13,6 @@ import LoaderOverlay from "../../../Components/LoaderOverlay/LoaderOverlay";
 const Login = ({ setauthenticated }) => {
   const [email, setemail] = useState("");
   const [pswd, setpswd] = useState("");
-  const [loading, setloading] = useState(false);
   const [viewPassword, setviewPassword] = useState(false);
   const [err, seterr] = useState("");
   const [loader, setLoader] = useState(true);
@@ -36,7 +35,7 @@ const Login = ({ setauthenticated }) => {
       )
         .then((res) => {
           setUser(res.data.user);
-          // setLoader(false)
+          setLoader(false)
         })
         .catch((err) => {
           console.log(err);
@@ -69,7 +68,7 @@ const Login = ({ setauthenticated }) => {
       seterr("Login Failed. Please try again.");
       setLoader(false); 
     } finally {
-      // setLoader(false); 
+      setLoader(false); 
     }
   };
 
@@ -153,7 +152,7 @@ const Login = ({ setauthenticated }) => {
         </div>
       </div>
     </section>
-    <LoaderOverlay isVisible={loading}/>
+    <LoaderOverlay isVisible={loader}/>
     </>
   );
 };
