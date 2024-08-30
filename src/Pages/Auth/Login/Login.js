@@ -36,7 +36,7 @@ const Login = ({ setauthenticated }) => {
       )
         .then((res) => {
           setUser(res.data.user);
-          setLoader(false)
+          // setLoader(false)
         })
         .catch((err) => {
           console.log(err);
@@ -67,8 +67,9 @@ const Login = ({ setauthenticated }) => {
     } catch (error) {
       console.error("Login Failed:", error);
       seterr("Login Failed. Please try again.");
-    } finally {
       setLoader(false); 
+    } finally {
+      // setLoader(false); 
     }
   };
 
