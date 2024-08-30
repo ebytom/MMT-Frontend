@@ -50,8 +50,10 @@ const Login = ({ setauthenticated }) => {
     setLoader(true);
     try {
       const token = credentialResponse.credential;
-      const response = await Axios.post("/api/v1/app/auth/signUpWithGoogle", {
-        token,
+      const response = await Axios.post("/api/v1/app/auth/signUpWithGoogle", {},{
+        headers: {
+          authorization: `bearer ${token}`,
+        },
       });
       const { user, token: newToken } = response.data;
       setUser(user);
