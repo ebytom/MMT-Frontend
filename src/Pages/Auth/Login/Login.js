@@ -36,7 +36,7 @@ const Login = ({ setauthenticated }) => {
       )
         .then((res) => {
           setUser(res.data.user);
-          // setLoader(false)
+          setLoader(false)
         })
         .catch((err) => {
           console.log(err);
