@@ -15,75 +15,58 @@ const Login = ({ setauthenticated }) => {
   const [loading, setloading] = useState(false);
   const [viewPassword, setviewPassword] = useState(false);
   const [err, seterr] = useState("");
+  const [loader, setLoader] = useState(false);
 
   const { setUser } = useContext(UserContext);
 
   const nav = useNavigate();
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     const decodedToken = jwtDecode(token);
-  //     console.log(decodedToken); // Log the decoded token if needed
-  //     setUser(decodedToken);
-  //   }
-  // }, []);
-
-  // const login = (credentialResponse) => {
-  //   console.log(credentialResponse);
-  //   const decodedCredentials = jwtDecode(credentialResponse.credential);
-  //   console.log(decodedCredentials);
-
-  //   setUser(decodedCredentials);
-  //   localStorage.setItem("token", credentialResponse.credential);
-  // };
-
-
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     const decodedToken = jwtDecode(token);
-  //     setUser(decodedToken);
-  //   }
-  // }, []);
-
   useEffect(() => {
+    setLoader(true);
     if (localStorage.getItem("token") != null) {
-        Axios.post("/api/v1/app/auth/whoami", {}, {
-            headers: {
-                'authorization': `beare ${localStorage.getItem("token")}`
-            }
+      Axios.post(
+        "/api/v1/app/auth/whoami",
+        {},
+        {
+          headers: {
+            authorization: `beare ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+        .then((res) => {
+          setUser(res.data.user);
+          setLoader(false)
         })
-            .then((res) => {
-              console.log(res);
-              
-                    setUser(res.data.user)
-            })
-            .catch((err) => {
-                console.log(err);
-                seterr("Session Expired! login again...")
-                localStorage.removeItem("token")
-            })
+        .catch((err) => {
+          console.log(err);
+          seterr("Session Expired! login again...");
+          setLoader(false)
+          localStorage.removeItem("token");
+        });
     }
-}, [])
+  }, []);
 
   const login = async (credentialResponse) => {
+    setLoader(true)
     try {
       const token = credentialResponse.credential;
 
       // Send token to backend for verification
-      const response = await Axios.post("/api/v1/app/auth/signUpWithGoogle", { token });
-    
+      const response = await Axios.post("/api/v1/app/auth/signUpWithGoogle", {
+        token,
+      });
+
       // Handle successful login
       const { user, token: newToken } = response.data;
 
       setUser(user);
       localStorage.setItem("token", newToken);
       nav("/dashboard"); // Redirect to dashboard or home page
+      setLoader(false)
     } catch (error) {
       console.error("Login Failed:", error);
       seterr("Login Failed. Please try again.");
+      setLoader(false)
     }
   };
   //   useEffect(
@@ -207,7 +190,7 @@ const Login = ({ setauthenticated }) => {
                 <div className="w-100 d-flex">
                   <div className="flex-grow-1">
                     <GoogleLogin
-                    width={320}
+                      width={320}
                       onSuccess={(credentialResponse) => {
                         login(credentialResponse);
                       }}

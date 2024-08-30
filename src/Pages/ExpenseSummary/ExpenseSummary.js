@@ -100,7 +100,15 @@ const formFields = {
         { value: "insurance", label: "Insurance" },
         { value: "service&Maintenance", label: "Service & Maintenance" },
         { value: "salary&incentives", label: "Salary & Incentives" },
+        { value: "other", label: "Other" },
       ],
+    },
+    {
+      type: "input",
+      name: "other",
+      label: "Other",
+      textType: "text",
+      rules: [{ required: true, message: "Please enter other category" }],
     },
     {
       type: "input",
@@ -133,6 +141,7 @@ const apis = {
     deleteAPI: "deleteOtherExpenseById", // Add this line
   },
 };
+
 
 function getDeleteApiEndpoints(expenseType) {
   const expense = apis[expenseType];
@@ -276,7 +285,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
-            onCancel={()=>{}}
+            onCancel={() => {}}
           >
             <button
               type="button"
@@ -330,7 +339,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
-            onCancel={()=>{}}
+            onCancel={() => {}}
           >
             <button
               type="button"
@@ -378,7 +387,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
-            onCancel={()=>{}}
+            onCancel={() => {}}
           >
             <button
               type="button"

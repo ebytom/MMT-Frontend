@@ -15,6 +15,7 @@ const ExpenseModal = forwardRef(
     const [loading, setLoading] = useState(false);
     const [contentLoader, setContentLoader] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [form] = Form.useForm();
 
     const {user} = useContext(UserContext)
@@ -38,6 +39,13 @@ const ExpenseModal = forwardRef(
     useImperativeHandle(ref, () => ({
       showModal,
     }));
+
+    const handleCategoryChange = (value) => {
+      setSelectedCategory(value);
+      if (value !== 'other') {
+        form.setFieldsValue({ other: '' });
+      }
+    };
 
     const submitDetails = async () => {
       try {
@@ -72,6 +80,9 @@ const ExpenseModal = forwardRef(
 
     const renderFormFields = () => {
       return formFields.map((field) => {
+        if (field.name === 'other' && selectedCategory !== 'other') {
+          return null; // Skip rendering if 'other' is disabled
+        }
         switch (field.type) {
           case "date":
             return (
@@ -93,7 +104,7 @@ const ExpenseModal = forwardRef(
                 name={field.name}
                 rules={field.rules}
               >
-                <Input type={field.textType}/>
+                <Input type={field.textType} disabled={field.name === 'other' && selectedCategory !== 'other'}/>
               </Form.Item>
             );
           case "select":
@@ -105,7 +116,7 @@ const ExpenseModal = forwardRef(
                 hasFeedback
                 rules={field.rules}
               >
-                <Select placeholder={field.placeholder}>
+                <Select placeholder={field.placeholder} onChange={handleCategoryChange}>
                   {field.options.map((option) => (
                     <Option key={option.value} value={option.value}>
                       {option.label}
