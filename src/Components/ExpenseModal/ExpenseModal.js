@@ -114,7 +114,6 @@ const ExpenseModal = forwardRef(
                 </Select>
               </Form.Item>
             );
-          // Add more cases as needed for different types of inputs
           default:
             return null;
         }
@@ -123,7 +122,7 @@ const ExpenseModal = forwardRef(
 
     const initialValues = formFields.reduce((acc, field) => {
       if (field.type === "date") {
-        acc[field.name] = dayjs(); // Set default date value here
+        acc[field.name] = dayjs(); 
       }
       return acc;
     }, {});
