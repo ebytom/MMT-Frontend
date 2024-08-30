@@ -8,135 +8,13 @@ import LoaderOverlay from "../../Components/LoaderOverlay/LoaderOverlay";
 import { DatePicker, Space } from "antd";
 // import moment from "moment";
 import dayjs from "dayjs";
+import ConfirmModal from "../../Components/ConfirmModal/ConfirmModal";
 // import locale from 'antd/locale/en_GB';
 // import 'dayjs/locale/en-gb';
 
-// dayjs.locale('en-gb'); 
+// dayjs.locale('en-gb');
 
 const { RangePicker } = DatePicker;
-
-const tableColumns = {
-  fuelExpenses: [
-    {
-      title: "Date",
-      width: 40,
-      dataIndex: "date",
-      key: "date",
-      fixed: "left",
-    },
-    {
-      title: "Current KM",
-      width: 100,
-      dataIndex: "currentKM",
-      key: "currentKM",
-    },
-    {
-      title: "Litres",
-      width: 100,
-      dataIndex: "litres",
-      key: "litres",
-    },
-    {
-      title: "Cost",
-      width: 100,
-      dataIndex: "cost",
-      key: "cost",
-    },
-    {
-      title: "Range",
-      width: 100,
-      dataIndex: "range",
-      key: "range",
-    },
-    {
-      title: "Mileage",
-      width: 100,
-      dataIndex: "mileage",
-      key: "mileage",
-    },
-    {
-      title: "Action",
-      key: "operation",
-      //   fixed: "right",
-      width: 40,
-      render: () => <a className="text-primary">delete</a>,
-    },
-  ],
-  defExpenses: [
-    {
-      title: "Date",
-      width: 40,
-      dataIndex: "date",
-      key: "date",
-      fixed: "left",
-    },
-    {
-      title: "Current KM",
-      width: 100,
-      dataIndex: "currentKM",
-      key: "currentKM",
-    },
-    {
-      title: "Range",
-      width: 100,
-      dataIndex: "range",
-      key: "range",
-    },
-    {
-      title: "Litres",
-      width: 100,
-      dataIndex: "litres",
-      key: "litres",
-    },
-    {
-      title: "Cost",
-      width: 100,
-      dataIndex: "cost",
-      key: "cost",
-    },
-    {
-      title: "Action",
-      key: "operation",
-      //   fixed: "right",
-      width: 40,
-      render: () => <a className="text-primary">delete</a>,
-    },
-  ],
-  otherExpenses: [
-    {
-      title: "Date",
-      width: 40,
-      dataIndex: "date",
-      key: "date",
-      fixed: "left",
-    },
-    {
-      title: "Category",
-      width: 100,
-      dataIndex: "category",
-      key: "category",
-    },
-    {
-      title: "Cost",
-      width: 100,
-      dataIndex: "cost",
-      key: "cost",
-    },
-    {
-      title: "Note",
-      width: 100,
-      dataIndex: "note",
-      key: "note",
-    },
-    {
-      title: "Action",
-      key: "operation",
-      //   fixed: "right",
-      width: 40,
-      render: () => <a className="text-primary">delete</a>,
-    },
-  ],
-};
 
 const formFields = {
   fuelExpenses: [
@@ -240,23 +118,26 @@ const apis = {
     addAPI: "addFuelExpense",
     updateAPI: "updateFuelExpense",
     getAllExpenses: "getAllFuelExpensesByTruckId",
+    deleteAPI: "deleteFuelExpenseById", // Add this line
   },
   defExpenses: {
     addAPI: "addDefExpense",
     updateAPI: "updateDefExpense",
     getAllExpenses: "getAllDefExpensesByTruckId",
+    deleteAPI: "deleteDefExpenseById", // Add this line
   },
   otherExpenses: {
     addAPI: "addOtherExpense",
     updateAPI: "updateOtherExpense",
     getAllExpenses: "getAllOtherExpensesByTruckId",
+    deleteAPI: "deleteOtherExpenseById", // Add this line
   },
 };
 
-function getAddApiEndpoints(expenseType) {
+function getDeleteApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
-    return expense.addAPI;
+    return expense.deleteAPI;
   } else {
     throw new Error(`Invalid expense type: ${expenseType}`);
   }
@@ -312,33 +193,219 @@ const ExpenseSummary = () => {
       });
   }, [selectedDates]);
 
+  const handleOk = (id) => {
+    Axios.delete(
+      `/api/v1/app/${location.pathname.split("/")[3]}/${getDeleteApiEndpoints(
+        location.pathname.split("/")[3]
+      )}/${id}`,
+      { params: { id } }
+    )
+      .then(() => {
+        setSelectedDates([dayjs().subtract(1, "month"), dayjs()]);
+      })
+      .catch((err) => {
+        console.error("Failed to delete expense:", err);
+      });
+  };
+
   const callExpenseModal = () => {
     if (expenseModalRef.current) {
       expenseModalRef.current.showModal();
     }
   };
 
-  const maxDate = new Date();  
+  const maxDate = new Date();
 
   const handleDateChange = (dates) => {
     if (dates) {
-      const formattedDates = [dates[0].endOf('day').toISOString(), dates[1].endOf('day').toISOString()];
+      const formattedDates = [
+        dates[0].endOf("day").toISOString(),
+        dates[1].endOf("day").toISOString(),
+      ];
       setSelectedDates(formattedDates);
     } else {
       setSelectedDates([]);
     }
   };
 
+  const tableColumns = {
+    fuelExpenses: [
+      {
+        title: "Date",
+        width: 40,
+        dataIndex: "date",
+        key: "date",
+        fixed: "left",
+      },
+      {
+        title: "Current KM",
+        width: 100,
+        dataIndex: "currentKM",
+        key: "currentKM",
+      },
+      {
+        title: "Litres",
+        width: 100,
+        dataIndex: "litres",
+        key: "litres",
+      },
+      {
+        title: "Cost",
+        width: 100,
+        dataIndex: "cost",
+        key: "cost",
+      },
+      {
+        title: "Range",
+        width: 100,
+        dataIndex: "range",
+        key: "range",
+      },
+      {
+        title: "Mileage",
+        width: 100,
+        dataIndex: "mileage",
+        key: "mileage",
+      },
+      {
+        title: "Action",
+        key: "operation",
+        width: 40,
+        render: (text, record) => (
+          <ConfirmModal
+            title="Confirm Action"
+            content="Are you sure you want to delete?"
+            onOk={() => handleOk(record._id)}
+            onCancel={null}
+          >
+            <button
+              type="button"
+              className="btn btn-danger btn-rounded btn-floating"
+            >
+              Delete
+            </button>
+          </ConfirmModal>
+        ),
+      },
+    ],
+    defExpenses: [
+      {
+        title: "Date",
+        width: 40,
+        dataIndex: "date",
+        key: "date",
+        fixed: "left",
+      },
+      {
+        title: "Current KM",
+        width: 100,
+        dataIndex: "currentKM",
+        key: "currentKM",
+      },
+      {
+        title: "Range",
+        width: 100,
+        dataIndex: "range",
+        key: "range",
+      },
+      {
+        title: "Litres",
+        width: 100,
+        dataIndex: "litres",
+        key: "litres",
+      },
+      {
+        title: "Cost",
+        width: 100,
+        dataIndex: "cost",
+        key: "cost",
+      },
+      {
+        title: "Action",
+        key: "operation",
+        //   fixed: "right",
+        width: 40,
+        render: (text, record) => (
+          <ConfirmModal
+            title="Confirm Action"
+            content="Are you sure you want to delete?"
+            onOk={() => handleOk(record._id)}
+            onCancel={null}
+          >
+            <button
+              type="button"
+              className="btn btn-danger btn-rounded btn-floating"
+            >
+              Delete
+            </button>
+          </ConfirmModal>
+        ),
+      },
+    ],
+    otherExpenses: [
+      {
+        title: "Date",
+        width: 40,
+        dataIndex: "date",
+        key: "date",
+        fixed: "left",
+      },
+      {
+        title: "Category",
+        width: 100,
+        dataIndex: "category",
+        key: "category",
+      },
+      {
+        title: "Cost",
+        width: 100,
+        dataIndex: "cost",
+        key: "cost",
+      },
+      {
+        title: "Note",
+        width: 100,
+        dataIndex: "note",
+        key: "note",
+      },
+      {
+        title: "Action",
+        key: "operation",
+        //   fixed: "right",
+        width: 40,
+        render: (text, record) => (
+          <ConfirmModal
+            title="Confirm Action"
+            content="Are you sure you want to delete?"
+            onOk={() => handleOk(record._id)}
+            onCancel={null}
+          >
+            <button
+              type="button"
+              className="btn btn-danger btn-rounded btn-floating"
+            >
+              Delete
+            </button>
+          </ConfirmModal>
+        ),
+      },
+    ],
+  };
+
   return (
     <>
       <LoaderOverlay isVisible={contentLoader} />
-        <RangePicker
-          className="mb-4"
-          format="YYYY-MM-DD"
-          onChange={handleDateChange}
-          disabledDate={(current) => current && current > maxDate}
-          value={selectedDates?.length ? [dayjs(selectedDates[0]),dayjs(selectedDates[1])] : [dayjs(), dayjs()]}
-        />
+      <RangePicker
+        className="mb-4"
+        format="YYYY-MM-DD"
+        onChange={handleDateChange}
+        disabledDate={(current) => current && current > maxDate}
+        value={
+          selectedDates?.length
+            ? [dayjs(selectedDates[0]), dayjs(selectedDates[1])]
+            : [dayjs(), dayjs()]
+        }
+      />
       <Table
         columns={tableColumns[location.pathname.split("/")[3]]}
         dataSource={expensesList}
