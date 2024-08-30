@@ -142,7 +142,6 @@ const apis = {
   },
 };
 
-
 function getDeleteApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
@@ -169,6 +168,7 @@ const ExpenseSummary = () => {
   });
   const [contentLoader, setContentLoader] = useState(true);
   const [expensesList, setExpensesList] = useState([]);
+  const [totalExpense, setTotalExpense] = useState(0);
   const [isError, setIsError] = useState(false);
   const [selectedDates, setSelectedDates] = useState([
     dayjs().subtract(1, "month"),
@@ -192,11 +192,15 @@ const ExpenseSummary = () => {
       }
     )
       .then((res) => {
-        setExpensesList(res.data);
+        console.log(res);
+
+        setExpensesList(res.data.expenses);
+        setTotalExpense(res.data.totalExpense || 0);
         setContentLoader(false);
       })
       .catch((err) => {
         setExpensesList([]);
+        setTotalExpense(0);
         setIsError(true);
         setContentLoader(false);
       });
@@ -216,11 +220,13 @@ const ExpenseSummary = () => {
       }
     )
       .then((res) => {
-        setExpensesList(res.data);
+        setExpensesList(res.data.expenses);
+        setTotalExpense(res.data.totalExpense || 0);
         setContentLoader(false);
       })
       .catch((err) => {
         setExpensesList([]);
+        setTotalExpense(0);
         setIsError(true);
         setContentLoader(false);
       });
@@ -428,17 +434,22 @@ const ExpenseSummary = () => {
   return (
     <>
       <LoaderOverlay isVisible={contentLoader} />
-      <RangePicker
-        className="mb-4"
-        format="YYYY-MM-DD"
-        onChange={handleDateChange}
-        disabledDate={(current) => current && current > maxDate}
-        value={
-          selectedDates?.length
-            ? [dayjs(selectedDates[0]), dayjs(selectedDates[1])]
-            : [dayjs(), dayjs()]
-        }
-      />
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <RangePicker
+          format="YYYY-MM-DD"
+          onChange={handleDateChange}
+          disabledDate={(current) => current && current > maxDate}
+          value={
+            selectedDates?.length
+              ? [dayjs(selectedDates[0]), dayjs(selectedDates[1])]
+              : [dayjs(), dayjs()]
+          }
+        />
+        <div className="d-flex border align-items-center p-2 ps-3 rounded gap-3" style={{background: "#fafafa"}}>
+          <b>Total Expense</b>
+          <div className="p-2 border bg-white rounded">{totalExpense}</div>
+        </div>
+      </div>
       <Table
         columns={tableColumns[location.pathname.split("/")[3]]}
         dataSource={expensesList}

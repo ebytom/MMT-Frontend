@@ -9,6 +9,9 @@ import { UserContext } from "../../App";
 
 const { Option } = Select;
 
+console.log(dayjs());
+
+
 const ExpenseModal = forwardRef(
   ({ addExpense, category, formFields, apis, onSuccess }, ref) => {
     const [open, setOpen] = useState(false);
