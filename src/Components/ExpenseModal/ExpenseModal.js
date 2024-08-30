@@ -10,7 +10,7 @@ import { UserContext } from "../../App";
 const { Option } = Select;
 
 const ExpenseModal = forwardRef(
-  ({ addExpense, category, formFields, apis }, ref) => {
+  ({ addExpense, category, formFields, apis, onSuccess }, ref) => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [contentLoader, setContentLoader] = useState(false);
@@ -65,7 +65,7 @@ const ExpenseModal = forwardRef(
             setContentLoader(false);
             form.resetFields();
             setOpen(false);
-            window.location.reload();
+            onSuccess()
           })
           .catch((err) => {
             console.error("Error:", err); // Log the error details for debugging

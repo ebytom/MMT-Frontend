@@ -202,6 +202,30 @@ const ExpenseSummary = () => {
       });
   }, [selectedDates]);
 
+  const refreshExpenses = () => {
+    setContentLoader(true);
+    Axios.get(
+      `/api/v1/app/${location.pathname.split("/")[3]}/${getAllApiEndpoints(
+        location.pathname.split("/")[3]
+      )}`,
+      {
+        params: {
+          truckId: location.pathname.split("/")[2],
+          selectedDates,
+        },
+      }
+    )
+      .then((res) => {
+        setExpensesList(res.data);
+        setContentLoader(false);
+      })
+      .catch((err) => {
+        setExpensesList([]);
+        setIsError(true);
+        setContentLoader(false);
+      });
+  };
+
   const handleOk = (id) => {
     Axios.delete(
       `/api/v1/app/${location.pathname.split("/")[3]}/${getDeleteApiEndpoints(
@@ -445,6 +469,7 @@ const ExpenseSummary = () => {
         category={expenses[location.pathname.split("/")[3]]}
         formFields={formFields[location.pathname.split("/")[3]]}
         apis={apis}
+        onSuccess={refreshExpenses}
       />
     </>
   );

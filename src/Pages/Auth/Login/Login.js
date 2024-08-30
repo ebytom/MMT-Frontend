@@ -32,7 +32,6 @@ const Login = ({ setauthenticated }) => {
             }
           );
           setUser(response.data.user);
-          nav("/dashboard"); // Redirect to dashboard if session is valid
         }
       } catch (err) {
         console.log(err);
@@ -58,7 +57,6 @@ const Login = ({ setauthenticated }) => {
       const { user, token: newToken } = response.data;
       setUser(user);
       localStorage.setItem("token", newToken);
-      nav("/dashboard"); // Redirect to dashboard or home page
     } catch (error) {
       console.error("Login Failed:", error);
       seterr("Login Failed. Please try again.");
