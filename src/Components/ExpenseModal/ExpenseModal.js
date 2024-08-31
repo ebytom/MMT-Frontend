@@ -1,16 +1,18 @@
-import React, { forwardRef, useContext, useImperativeHandle, useState } from "react";
-import { Button, DatePicker, Form, Input, Modal, Select, Upload } from "antd";
-import dayjs from "dayjs";
+import React, {
+  forwardRef,
+  useContext,
+  useImperativeHandle,
+  useState,
+} from "react";
+import { Button, Form, Input, Modal, Select } from "antd";
 import { Axios } from "../../Config/Axios/Axios";
 import LoaderOverlay from "../LoaderOverlay/LoaderOverlay";
-import { Content } from "antd/es/layout/layout";
 import { useLocation } from "react-router-dom";
 import { UserContext } from "../../App";
+import DatePicker from "react-date-picker";
+import moment from "moment";
 
 const { Option } = Select;
-
-console.log(dayjs());
-
 
 const ExpenseModal = forwardRef(
   ({ addExpense, category, formFields, apis, onSuccess }, ref) => {
@@ -18,10 +20,10 @@ const ExpenseModal = forwardRef(
     const [loading, setLoading] = useState(false);
     const [contentLoader, setContentLoader] = useState(false);
     const [isError, setIsError] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState("");
     const [form] = Form.useForm();
 
-    const {user} = useContext(UserContext)
+    const { user } = useContext(UserContext);
 
     function getApiEndpoints(expenseType) {
       const expense = apis[expenseType];
@@ -45,21 +47,31 @@ const ExpenseModal = forwardRef(
 
     const handleCategoryChange = (value) => {
       setSelectedCategory(value);
-      if (value !== 'other') {
-        form.setFieldsValue({ other: '' });
+      if (value !== "other") {
+        form.setFieldsValue({ other: "" });
       }
+    };
+
+    const handleDateChange = (e) => {
+      const dateValue = e.target.value;
+      // Convert date string to timestamp
+      const timestamp = new Date(dateValue).valueOf();
+      form.setFieldsValue({ date: dateValue });
     };
 
     const submitDetails = async () => {
       try {
         const values = await form.validateFields();
+        
         setContentLoader(true);
+        // Convert date string to timestamp
+        const timestampedValues = { ...values, date: new Date(values.date).valueOf() };
         Axios.post(
           `/api/v1/app/${location.pathname.split("/")[3]}/${getApiEndpoints(
             location.pathname.split("/")[3]
           )}`,
           {
-            ...values,
+            ...timestampedValues,
             addedBy: user.userId,
             truckId: location.pathname.split("/")[2],
           }
@@ -68,7 +80,7 @@ const ExpenseModal = forwardRef(
             setContentLoader(false);
             form.resetFields();
             setOpen(false);
-            onSuccess()
+            onSuccess();
           })
           .catch((err) => {
             console.error("Error:", err); // Log the error details for debugging
@@ -80,10 +92,11 @@ const ExpenseModal = forwardRef(
         console.error("Form submission failed:", error);
       }
     };
+    
 
     const renderFormFields = () => {
       return formFields.map((field) => {
-        if (field.name === 'other' && selectedCategory !== 'other') {
+        if (field.name === "other" && selectedCategory !== "other") {
           return null; // Skip rendering if 'other' is disabled
         }
         switch (field.type) {
@@ -94,9 +107,22 @@ const ExpenseModal = forwardRef(
                 label={field.label}
                 name={field.name}
                 rules={field.rules}
-                defaultValue={dayjs()}
+                initialValue={moment().format("YYYY-MM-DD")} 
               >
-                <DatePicker defaultValue={dayjs()} />
+                {/* <DatePicker
+                  format="YYYY-MM-DD"
+                  onChange={(date) => form.setFieldsValue({ [field.name]: date ? date.valueOf() : null })}
+                /> */}
+                <input
+                  type="date"
+                  style={{
+                    padding: "10px",
+                    width: "100%",
+                    border: "1px solid #ddd",
+                    borderRadius: "7px",
+                  }}
+                  onChange={handleDateChange}
+                />
               </Form.Item>
             );
           case "input":
@@ -107,7 +133,12 @@ const ExpenseModal = forwardRef(
                 name={field.name}
                 rules={field.rules}
               >
-                <Input type={field.textType} disabled={field.name === 'other' && selectedCategory !== 'other'}/>
+                <Input
+                  type={field.textType}
+                  disabled={
+                    field.name === "other" && selectedCategory !== "other"
+                  }
+                />
               </Form.Item>
             );
           case "select":
@@ -119,7 +150,10 @@ const ExpenseModal = forwardRef(
                 hasFeedback
                 rules={field.rules}
               >
-                <Select placeholder={field.placeholder} onChange={handleCategoryChange}>
+                <Select
+                  placeholder={field.placeholder}
+                  onChange={handleCategoryChange}
+                >
                   {field.options.map((option) => (
                     <Option key={option.value} value={option.value}>
                       {option.label}
@@ -136,7 +170,7 @@ const ExpenseModal = forwardRef(
 
     const initialValues = formFields.reduce((acc, field) => {
       if (field.type === "date") {
-        acc[field.name] = dayjs(); 
+        acc[field.name] = moment(); // Set initial value as current timestamp
       }
       return acc;
     }, {});

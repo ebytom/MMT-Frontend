@@ -9,6 +9,7 @@ import { DatePicker, Space } from "antd";
 // import moment from "moment";
 import dayjs from "dayjs";
 import ConfirmModal from "../../Components/ConfirmModal/ConfirmModal";
+import { ArrowRightIcon } from "@primer/octicons-react";
 // import locale from 'antd/locale/en_GB';
 // import 'dayjs/locale/en-gb';
 
@@ -171,9 +172,10 @@ const ExpenseSummary = () => {
   const [totalExpense, setTotalExpense] = useState(0);
   const [isError, setIsError] = useState(false);
   const [selectedDates, setSelectedDates] = useState([
-    dayjs().subtract(1, "month"),
-    dayjs(),
+    dayjs().subtract(1, "month").format("YYYY-MM-DD"),
+    dayjs().format("YYYY-MM-DD"),
   ]);
+  
 
   const location = useLocation();
   const expenseModalRef = useRef();
@@ -192,8 +194,6 @@ const ExpenseSummary = () => {
       }
     )
       .then((res) => {
-        console.log(res);
-
         setExpensesList(res.data.expenses);
         setTotalExpense(res.data.totalExpense || 0);
         setContentLoader(false);
@@ -255,16 +255,13 @@ const ExpenseSummary = () => {
 
   const maxDate = new Date();
 
-  const handleDateChange = (dates) => {
-    if (dates) {
-      const formattedDates = [
-        dates[0].endOf("day").toISOString(),
-        dates[1].endOf("day").toISOString(),
-      ];
-      setSelectedDates(formattedDates);
-    } else {
-      setSelectedDates([]);
-    }
+  const handleDateChange = (date, dateString, index) => {
+    const newDates = [...selectedDates];
+    newDates[index] = dateString
+    
+
+    setSelectedDates(newDates);
+    refreshExpenses();
   };
 
   const tableColumns = {
@@ -315,6 +312,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
+            key={record._id}
             onCancel={() => {}}
           >
             <button
@@ -369,6 +367,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
+            key={record._id}
             onCancel={() => {}}
           >
             <button
@@ -417,6 +416,7 @@ const ExpenseSummary = () => {
             title="Confirm Action"
             content="Are you sure you want to delete?"
             onOk={() => handleOk(record._id)}
+            key={record._id}
             onCancel={() => {}}
           >
             <button
@@ -435,7 +435,7 @@ const ExpenseSummary = () => {
     <>
       <LoaderOverlay isVisible={contentLoader} />
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <RangePicker
+        {/* <RangePicker
           format="YYYY-MM-DD"
           onChange={handleDateChange}
           disabledDate={(current) => current && current > maxDate}
@@ -444,8 +444,42 @@ const ExpenseSummary = () => {
               ? [dayjs(selectedDates[0]), dayjs(selectedDates[1])]
               : [dayjs(), dayjs()]
           }
-        />
-        <div className="d-flex border align-items-center p-2 ps-3 rounded gap-3" style={{background: "#fafafa"}}>
+        /> */}
+
+        <div className="d-flex gap-3 align-items-center">
+          <input
+            type="date"
+            style={{
+              padding: "10px",
+              width: "100%",
+              border: "1px solid #ddd",
+              borderRadius: "7px",
+            }}
+            onChange={(e) =>
+              handleDateChange(e.target.value, e.target.value, 0)
+            }
+            value={selectedDates[0]}
+          />
+          <ArrowRightIcon size={16} />
+          <input
+            type="date"
+            style={{
+              padding: "10px",
+              width: "100%",
+              border: "1px solid #ddd",
+              borderRadius: "7px",
+            }}
+            onChange={(e) =>
+              handleDateChange(e.target.value, e.target.value, 1)
+            }
+            value={selectedDates[1]}
+          />
+        </div>
+
+        <div
+          className="d-flex border align-items-center p-2 ps-3 rounded gap-3"
+          style={{ background: "#fafafa" }}
+        >
           <b>Total Expense</b>
           <div className="p-2 border bg-white rounded">{totalExpense}</div>
         </div>
