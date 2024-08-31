@@ -10,14 +10,18 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Axios } from "../../Config/Axios/Axios";
 import LoaderOverlay from "../LoaderOverlay/LoaderOverlay";
 import { UserContext } from "../../App";
+import ConfirmModal from "../ConfirmModal/ConfirmModal";
 
 const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [contentLoader, setContentLoader] = useState(false);
   const [truck, setTruck] = useState({});
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [deleteBtn, setDeleteBtn] = useState(false);
   const [form] = Form.useForm();
+  const [deleteForm] = Form.useForm();
 
   const { user } = useContext(UserContext);
 
@@ -70,6 +74,19 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
     });
   };
 
+  const handleDeleteForm = (e) => {
+    setDeleteBtn(false);
+    const { name, value } = e.target;
+
+    form.setFieldsValue({
+      [name]: value.toUpperCase(),
+    });
+
+    if (value.toUpperCase() === vehicleData?.registrationNo.toUpperCase()) {
+      setDeleteBtn(true);
+    }
+  };
+
   const submitDetails = async () => {
     try {
       const values = await form.validateFields(); // Validate and get form values
@@ -119,15 +136,51 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
     }
   };
 
+  const deleteTruck = () => {
+    if (deleteTruck) {
+      Axios.delete(`/api/v1/app/truck/deleteTruckById/${vehicleData._id}`)
+        .then(() => {
+          setShowDeleteConfirm(false);
+          setOpen(false);
+          window.location.reload()
+        })
+        .catch((err) => {
+          console.error("Failed to delete truck:", err);
+        });
+    }
+  };
+
+  const handleOk = () => {
+    setShowDeleteConfirm(true);
+  };
+
   return (
     <>
       <LoaderOverlay isVisible={contentLoader} />
       <Modal
         title="Vehicle Details"
         footer={
-          <Button type="primary" onClick={submitDetails}>
-            Submit
-          </Button>
+          vehicleData
+            ? [
+                <ConfirmModal
+                  title="Confirm Action"
+                  content="Are you sure you want to delete?"
+                  onOk={handleOk}
+                  onCancel={() => {}}
+                >
+                  <Button type="primary" danger>
+                    Delete
+                  </Button>
+                </ConfirmModal>,
+                <Button type="primary" onClick={submitDetails}>
+                  Update Truck
+                </Button>,
+              ]
+            : [
+                <Button type="primary" onClick={submitDetails}>
+                  Submit
+                </Button>,
+              ]
         }
         open={open}
         onCancel={() => {
@@ -232,6 +285,43 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
             initialValue={vehicleData ? vehicleData.desc : ""}
           >
             <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Modal
+        title="Delete Truck"
+        open={showDeleteConfirm}
+        onCancel={() => setShowDeleteConfirm(false)}
+        footer={[
+          <Button key="cancel" onClick={() => setShowDeleteConfirm(false)}>
+            Cancel
+          </Button>,
+          <Button
+            key="delete"
+            type="primary"
+            danger
+            onClick={deleteTruck}
+            disabled={!deleteBtn}
+          >
+            Delete
+          </Button>,
+        ]}
+      >
+        <p>
+          To confirm, type "<b>{vehicleData?.registrationNo}</b>" in the box
+          below.
+        </p>
+        <Form
+          form={deleteForm}
+          name="deleteForm"
+          labelCol={{ flex: "110px" }}
+          labelAlign="left"
+          labelWrap
+          wrapperCol={{ flex: 1 }}
+          colon={false}
+        >
+          <Form.Item name="deleteText">
+            <Input name="deleteText" onChange={handleDeleteForm} />
           </Form.Item>
         </Form>
       </Modal>
