@@ -10,6 +10,7 @@ import LoaderOverlay from "../LoaderOverlay/LoaderOverlay";
 import { useLocation } from "react-router-dom";
 import { UserContext } from "../../App";
 import DatePicker from "react-date-picker";
+import dayjs from "dayjs";
 import moment from "moment";
 
 const { Option } = Select;
@@ -62,7 +63,7 @@ const ExpenseModal = forwardRef(
     const submitDetails = async () => {
       try {
         const values = await form.validateFields();
-        
+
         setContentLoader(true);
         // Convert date string to timestamp
         const timestampedValues = { ...values, date: new Date(values.date).valueOf() };
@@ -170,7 +171,7 @@ const ExpenseModal = forwardRef(
 
     const initialValues = formFields.reduce((acc, field) => {
       if (field.type === "date") {
-        acc[field.name] = moment(); // Set initial value as current timestamp
+        acc[field.name] = dayjs().format("YYYY-MM-DD") // Set initial value as current timestamp
       }
       return acc;
     }, {});
