@@ -434,51 +434,34 @@ const ExpenseSummary = () => {
   return (
     <>
       <LoaderOverlay isVisible={contentLoader} />
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        {/* <RangePicker
-          format="YYYY-MM-DD"
-          onChange={handleDateChange}
-          disabledDate={(current) => current && current > maxDate}
-          value={
-            selectedDates?.length
-              ? [dayjs(selectedDates[0]), dayjs(selectedDates[1])]
-              : [dayjs(), dayjs()]
-          }
-        /> */}
-
-        <div className="d-flex gap-3 align-items-center">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+        <div className="d-flex flex-column flex-md-row gap-3 align-items-center mb-3 mb-md-0">
           <input
             type="date"
+            className="form-control"
             style={{
-              padding: "10px",
-              width: "100%",
-              border: "1px solid #ddd",
-              borderRadius: "7px",
+              padding: '10px',
+              borderRadius: '7px',
             }}
-            onChange={(e) =>
-              handleDateChange(e.target.value, e.target.value, 0)
-            }
+            onChange={(e) => handleDateChange(e.target.value, e.target.value, 0)}
             value={selectedDates[0]}
           />
           <ArrowRightIcon size={16} />
           <input
             type="date"
+            className="form-control"
             style={{
-              padding: "10px",
-              width: "100%",
-              border: "1px solid #ddd",
-              borderRadius: "7px",
+              padding: '10px',
+              borderRadius: '7px',
             }}
-            onChange={(e) =>
-              handleDateChange(e.target.value, e.target.value, 1)
-            }
+            onChange={(e) => handleDateChange(e.target.value, e.target.value, 1)}
             value={selectedDates[1]}
           />
         </div>
 
         <div
-          className="d-flex border align-items-center p-2 ps-3 rounded gap-3"
-          style={{ background: "#fafafa" }}
+          className="d-flex border align-items-center p-2 ps-3 rounded gap-3 justify-content-between"
+          style={{ background: '#fafafa' }}
         >
           <b>Total Expense</b>
           <div className="p-2 border bg-white rounded">{totalExpense}</div>
