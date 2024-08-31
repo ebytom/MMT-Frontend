@@ -268,7 +268,7 @@ const ExpenseSummary = () => {
     fuelExpenses: [
       {
         title: "Date",
-        width: 40,
+        width: 50,
         dataIndex: "date",
         key: "date",
         fixed: "left",
@@ -328,7 +328,7 @@ const ExpenseSummary = () => {
     defExpenses: [
       {
         title: "Date",
-        width: 40,
+        width: 50,
         dataIndex: "date",
         key: "date",
         fixed: "left",
@@ -383,7 +383,7 @@ const ExpenseSummary = () => {
     otherExpenses: [
       {
         title: "Date",
-        width: 40,
+        width: 50,
         dataIndex: "date",
         key: "date",
         fixed: "left",
@@ -464,7 +464,7 @@ const ExpenseSummary = () => {
           style={{ background: '#fafafa' }}
         >
           <b>Total Expense</b>
-          <div className="p-2 border bg-white rounded">{totalExpense}</div>
+          <div className="p-2 border bg-white rounded fw-bold text-danger">{totalExpense}</div>
         </div>
       </div>
       <Table
