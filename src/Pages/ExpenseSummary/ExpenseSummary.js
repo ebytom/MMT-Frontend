@@ -172,7 +172,7 @@ const ExpenseSummary = () => {
   const [totalExpense, setTotalExpense] = useState(0);
   const [isError, setIsError] = useState(false);
   const [selectedDates, setSelectedDates] = useState([
-    dayjs().subtract(1, "month").format("YYYY-MM-DD"),
+    dayjs().startOf("month").format("YYYY-MM-DD"),
     dayjs().format("YYYY-MM-DD"),
   ]);
   

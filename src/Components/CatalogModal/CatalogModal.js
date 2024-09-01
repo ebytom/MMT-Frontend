@@ -23,6 +23,8 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
       },
     })
       .then((res) => {
+        console.log(res.data);
+        
         setMetadata(res.data);
         setLoading(false);
       })
@@ -62,7 +64,10 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
           >
             <div className="d-flex align-items-center p-2">
               <FlameIcon size={24} />
-              <span className="ms-3 fw-bold">Fuel Expenses</span>
+              <div className="d-flex flex-column ms-3" style={{alignItems: "flex-start"}}>
+                <span className="fw-bold m-0 p-0">Fuel Expenses</span>
+                <span className="p-0 m-0" style={{ fontSize: 10, fontStyle: "oblique" }}>this month</span>
+              </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
               <span className="fw-bold">{metadata.fuelTotal}</span>
@@ -82,7 +87,10 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
           >
             <div className="d-flex align-items-center p-2">
               <AppsIcon size={22} />
-              <span className="ms-3 fw-bold">Def Expenses</span>
+              <div className="d-flex flex-column ms-3" style={{alignItems: "flex-start"}}>
+                <span className="fw-bold m-0 p-0">Def Expenses</span>
+                <span className="p-0 m-0" style={{ fontSize: 10, fontStyle: "oblique" }}>this month</span>
+              </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
               <span className="fw-bold">{metadata.defTotal}</span>
@@ -104,7 +112,10 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
           >
             <div className="d-flex align-items-center p-2">
               <LogIcon size={22} />
-              <span className="ms-3 fw-bold">Other Expenses</span>
+              <div className="d-flex flex-column ms-3" style={{alignItems: "flex-start"}}>
+                <span className="fw-bold m-0 p-0">Other Expenses</span>
+                <span className="p-0 m-0" style={{ fontSize: 10, fontStyle: "oblique" }}>this month</span>
+              </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
               <span className="fw-bold">{metadata.otherTotal}</span>
