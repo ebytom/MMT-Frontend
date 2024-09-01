@@ -68,34 +68,85 @@ const Dashboard = () => {
       {analyticsLoader ? (
         <div className="w-100 my-5 d-flex align-items-center justify-content-center">
           <b className="me-3">Analyzing metrics</b>
-        <Spin size="large" />
+          <Spin size="large" />
         </div>
       ) : (
         <div className="dashboard-container">
           <StatisticCard
-            title={"Total Expenses"}
-            value={metadata.grandTotal}
-            thisMonth={metadata.monthlyExpenses?.monthlyGrandTotal}
+            title={
+              <b>
+                <span style={{ fontSize: 18, color: "#eee" }}>
+                  Total Expenses{" "}
+                </span>
+                <span style={{ fontSize: 10, fontStyle: "oblique" }}>
+                  {" "}
+                  this month
+                </span>
+              </b>
+            }
+            value={metadata.monthlyExpenses?.monthlyGrandTotal}
+            thisMonth={metadata.grandTotal}
           />
           <StatisticCard
-            title={"Total Fuel Expenses"}
-            value={metadata.fuelTotal}
-            thisMonth={metadata.monthlyExpenses?.fuel}
+            title={
+              <b>
+                <span style={{ fontSize: 18, color: "#eee" }}>
+                  Fuel Expenses{" "}
+                </span>
+                <span style={{ fontSize: 10, fontStyle: "oblique" }}>
+                  {" "}
+                  this month
+                </span>
+              </b>
+            }
+            thisMonth={metadata.fuelTotal}
+            value={metadata.monthlyExpenses?.fuel}
           />
           <StatisticCard
-            title={"Total Def Expenses"}
-            value={metadata.defTotal}
-            thisMonth={metadata.monthlyExpenses?.def}
+          
+          title={
+            <b>
+              <span style={{ fontSize: 18, color: "#eee" }}>
+                Def Expenses{" "}
+              </span>
+              <span style={{ fontSize: 10, fontStyle: "oblique" }}>
+                {" "}
+                this month
+              </span>
+            </b>
+          }
+            thisMonth={metadata.defTotal}
+            value={metadata.monthlyExpenses?.def}
           />
           <StatisticCard
-            title={"Total Other Expenses"}
-            value={metadata.otherTotal}
-            thisMonth={metadata.monthlyExpenses?.other}
+             title={
+              <b>
+                <span style={{ fontSize: 18, color: "#eee" }}>
+                  Other Expenses{" "}
+                </span>
+                <span style={{ fontSize: 10, fontStyle: "oblique" }}>
+                  {" "}
+                  this month
+                </span>
+              </b>
+            }
+            thisMonth={metadata.otherTotal}
+            value={metadata.monthlyExpenses?.other}
           />
           <StatisticCard
-            title={"Total Fuel Used"}
-            value={metadata.fuelUsedTotal}
-            thisMonth={metadata.monthlyExpenses?.fuelUsed}
+             title={
+              <b>
+                <span style={{ fontSize: 18, color: "#eee" }}>
+                  Fuel Used{" "}
+                </span>
+                <span style={{ fontSize: 10, fontStyle: "oblique" }}>
+                  {" "}
+                  this month
+                </span>
+              </b>
+            }
+            thisMonth={metadata.fuelUsedTotal}
+            value={metadata.monthlyExpenses?.fuelUsed}
           />
         </div>
       )}

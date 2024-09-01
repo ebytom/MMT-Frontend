@@ -16,7 +16,7 @@ const StatisticCard = (props) => {
             fontSize:24
           }}
         />
-        <Statistic
+        {/* <Statistic
         //   title={props.title}
           value={props.thisMonth}
           prefix={<ArrowUpOutlined />}
@@ -26,7 +26,7 @@ const StatisticCard = (props) => {
             fontWeight: 800,
             fontSize:16
           }}
-          />
+          /> */}
           </div>
       </Card>
   )
