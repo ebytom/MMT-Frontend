@@ -72,7 +72,7 @@ const Signup = () => {
     return (
         <div className='d-flex justify-content-center align-items-center' style={{ height: '100vh', width: '100vw' }}>
             <div className='rounded-3 p-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#dede28cf", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
-            <img src="mmt_logo.png" height="100px" className='my-3' />
+            {/* <img src="mmt_logo.png" height="100px" className='my-3' /> */}
             <b className='h3 fw-bold pb-2'>Manage My Truck</b>
                 {
                     err !== "" &&
