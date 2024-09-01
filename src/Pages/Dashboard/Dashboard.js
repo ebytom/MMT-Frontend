@@ -75,7 +75,7 @@ const Dashboard = () => {
           <StatisticCard
             title={
               <b>
-                <span style={{ fontSize: 18, color: "#eee" }}>
+                <span style={{ fontSize: 18, color: "#f6f6f6" }}>
                   Total Expenses{" "}
                 </span>
                 <span style={{ fontSize: 10, fontStyle: "oblique" }}>
@@ -90,7 +90,7 @@ const Dashboard = () => {
           <StatisticCard
             title={
               <b>
-                <span style={{ fontSize: 18, color: "#eee" }}>
+                <span style={{ fontSize: 18, color: "#f6f6f6" }}>
                   Fuel Expenses{" "}
                 </span>
                 <span style={{ fontSize: 10, fontStyle: "oblique" }}>
@@ -106,7 +106,7 @@ const Dashboard = () => {
           
           title={
             <b>
-              <span style={{ fontSize: 18, color: "#eee" }}>
+              <span style={{ fontSize: 18, color: "#f6f6f6" }}>
                 Def Expenses{" "}
               </span>
               <span style={{ fontSize: 10, fontStyle: "oblique" }}>
@@ -121,7 +121,7 @@ const Dashboard = () => {
           <StatisticCard
              title={
               <b>
-                <span style={{ fontSize: 18, color: "#eee" }}>
+                <span style={{ fontSize: 18, color: "#f6f6f6" }}>
                   Other Expenses{" "}
                 </span>
                 <span style={{ fontSize: 10, fontStyle: "oblique" }}>
@@ -136,7 +136,7 @@ const Dashboard = () => {
           <StatisticCard
              title={
               <b>
-                <span style={{ fontSize: 18, color: "#eee" }}>
+                <span style={{ fontSize: 18, color: "#f6f6f6" }}>
                   Fuel Used{" "}
                 </span>
                 <span style={{ fontSize: 10, fontStyle: "oblique" }}>
