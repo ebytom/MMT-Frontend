@@ -300,7 +300,7 @@ const ExpenseSummary = () => {
       // Create a link element and simulate a click to download the file
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "defExpenses.xlsx");
+      link.setAttribute("download", `${location.pathname.split("/")[3]}.xlsx`);
       document.body.appendChild(link);
       link.click();
   
