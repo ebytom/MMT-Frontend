@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ConfigProvider, FloatButton, Table } from "antd";
+import { Button, ConfigProvider, FloatButton, Table } from "antd";
 import { useLocation } from "react-router-dom";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, FileExcelOutlined } from "@ant-design/icons";
 import ExpenseModal from "../../Components/ExpenseModal/ExpenseModal";
 import { Axios } from "../../Config/Axios/Axios";
 import LoaderOverlay from "../../Components/LoaderOverlay/LoaderOverlay";
@@ -127,19 +127,24 @@ const apis = {
     addAPI: "addFuelExpense",
     updateAPI: "updateFuelExpense",
     getAllExpenses: "getAllFuelExpensesByTruckId",
-    deleteAPI: "deleteFuelExpenseById", // Add this line
+    deleteAPI: "deleteFuelExpenseById",
+    downloadAPI: "downloadFuelExpensesExcel",
+    
   },
   defExpenses: {
     addAPI: "addDefExpense",
     updateAPI: "updateDefExpense",
     getAllExpenses: "getAllDefExpensesByTruckId",
-    deleteAPI: "deleteDefExpenseById", // Add this line
+    deleteAPI: "deleteDefExpenseById",
+    downloadAPI: "downloadDefExpensesExcel",
+
   },
   otherExpenses: {
     addAPI: "addOtherExpense",
     updateAPI: "updateOtherExpense",
     getAllExpenses: "getAllOtherExpensesByTruckId",
-    deleteAPI: "deleteOtherExpenseById", // Add this line
+    deleteAPI: "deleteOtherExpenseById",
+    downloadAPI: "downloadOtherExpensesExcel",
   },
 };
 
@@ -161,6 +166,15 @@ function getAllApiEndpoints(expenseType) {
   }
 }
 
+function getDownloadApiEndpoints(expenseType) {
+  const expense = apis[expenseType];
+  if (expense) {
+    return expense.downloadAPI;
+  } else {
+    throw new Error(`Invalid expense type: ${expenseType}`);
+  }
+}
+
 const ExpenseSummary = () => {
   const [expenses, setExpenses] = useState({
     fuelExpenses: "Fuel Expenses",
@@ -175,7 +189,6 @@ const ExpenseSummary = () => {
     dayjs().startOf("month").format("YYYY-MM-DD"),
     dayjs().format("YYYY-MM-DD"),
   ]);
-  
 
   const location = useLocation();
   const expenseModalRef = useRef();
@@ -257,11 +270,47 @@ const ExpenseSummary = () => {
 
   const handleDateChange = (date, dateString, index) => {
     const newDates = [...selectedDates];
-    newDates[index] = dateString
-    
+    newDates[index] = dateString;
 
     setSelectedDates(newDates);
     refreshExpenses();
+  };
+
+  const handleReportDownload = async () => {
+    setContentLoader(true);
+    try {
+      const response = await Axios.get(
+        `/api/v1/app/${location.pathname.split("/")[3]}/${getDownloadApiEndpoints(
+          location.pathname.split("/")[3]
+        )}`,
+        {
+          params: {
+            truckId: location.pathname.split("/")[2],
+            selectedDates
+          },
+          responseType: 'blob' // Important to receive response as Blob
+        }
+      );
+  
+      setContentLoader(false);
+  
+      // Create a URL for the Blob
+      const url = URL.createObjectURL(new Blob([response.data]));
+  
+      // Create a link element and simulate a click to download the file
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "defExpenses.xlsx");
+      document.body.appendChild(link);
+      link.click();
+  
+      // Clean up
+      URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+      setContentLoader(false);
+    }
   };
 
   const tableColumns = {
@@ -440,10 +489,12 @@ const ExpenseSummary = () => {
             type="date"
             className="form-control"
             style={{
-              padding: '10px',
-              borderRadius: '7px',
+              padding: "10px",
+              borderRadius: "7px",
             }}
-            onChange={(e) => handleDateChange(e.target.value, e.target.value, 0)}
+            onChange={(e) =>
+              handleDateChange(e.target.value, e.target.value, 0)
+            }
             value={selectedDates[0]}
           />
           <ArrowRightIcon size={16} />
@@ -451,22 +502,27 @@ const ExpenseSummary = () => {
             type="date"
             className="form-control"
             style={{
-              padding: '10px',
-              borderRadius: '7px',
+              padding: "10px",
+              borderRadius: "7px",
             }}
-            onChange={(e) => handleDateChange(e.target.value, e.target.value, 1)}
+            onChange={(e) =>
+              handleDateChange(e.target.value, e.target.value, 1)
+            }
             value={selectedDates[1]}
           />
         </div>
 
         <div
           className="d-flex border align-items-center p-2 ps-3 rounded gap-3 justify-content-between"
-          style={{ background: '#fafafa' }}
+          style={{ background: "#fafafa" }}
         >
           <b>Total Expense</b>
-          <div className="p-2 border bg-white rounded fw-bold text-danger">{totalExpense}</div>
+          <div className="p-2 border bg-white rounded fw-bold text-danger">
+            {totalExpense}
+          </div>
         </div>
       </div>
+      <hr></hr>
       <Table
         columns={tableColumns[location.pathname.split("/")[3]]}
         dataSource={expensesList}
@@ -475,6 +531,18 @@ const ExpenseSummary = () => {
           y: 500,
         }}
       />
+      <hr></hr>
+      <div className="w-100 d-flex justify-content-center mt-5">
+        <Button
+          type="primary"
+          icon={<FileExcelOutlined style={{ fontSize: 22 }} size={32} />}
+          size={"large"}
+          disabled={expensesList.length ? false : true}
+          onClick={handleReportDownload}
+        >
+          <b>Download Report</b>
+        </Button>
+      </div>
       <FloatButton
         shape="circle"
         type="primary"
