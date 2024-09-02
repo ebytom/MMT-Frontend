@@ -23,8 +23,6 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
       },
     })
       .then((res) => {
-        console.log(res.data);
-        
         setMetadata(res.data);
         setLoading(false);
       })
