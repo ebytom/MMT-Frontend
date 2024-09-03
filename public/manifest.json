@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "mmt_logo.png",
+      "src": "mmt_icon_x512.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "mmt_logo.png",
+      "src": "mmt_icon_x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
