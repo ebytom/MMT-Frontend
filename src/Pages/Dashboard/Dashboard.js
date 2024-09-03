@@ -1,9 +1,7 @@
-import { DesktopDownloadIcon, HistoryIcon } from "@primer/octicons-react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Axios } from "../../Config/Axios/Axios";
 import { UserContext } from "../../App";
-import { Button, Divider, Modal, Spin } from "antd";
-import { Ring } from "@uiball/loaders";
+import { Divider, Spin } from "antd";
 import StatisticCard from "../../Components/StatisticCard/StatisticCard";
 import VehicleCard from "../../Components/VehicleCard/VehicleCard";
 import { PlusCircleFilled } from "@ant-design/icons";

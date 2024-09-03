@@ -1,6 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { Button, Form, Input, Modal, Upload } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Modal } from "antd";
 import { AppsIcon, FlameIcon, LogIcon } from "@primer/octicons-react";
 import { useNavigate } from "react-router-dom";
 import { Axios } from "../../Config/Axios/Axios";
@@ -62,9 +61,17 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
           >
             <div className="d-flex align-items-center p-2">
               <FlameIcon size={24} />
-              <div className="d-flex flex-column ms-3" style={{alignItems: "flex-start"}}>
+              <div
+                className="d-flex flex-column ms-3"
+                style={{ alignItems: "flex-start" }}
+              >
                 <span className="fw-bold m-0 p-0">Fuel Expenses</span>
-                <span className="p-0 m-0" style={{ fontSize: 10, fontStyle: "oblique" }}>this month</span>
+                <span
+                  className="p-0 m-0"
+                  style={{ fontSize: 10, fontStyle: "oblique" }}
+                >
+                  this month
+                </span>
               </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
@@ -85,9 +92,17 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
           >
             <div className="d-flex align-items-center p-2">
               <AppsIcon size={22} />
-              <div className="d-flex flex-column ms-3" style={{alignItems: "flex-start"}}>
+              <div
+                className="d-flex flex-column ms-3"
+                style={{ alignItems: "flex-start" }}
+              >
                 <span className="fw-bold m-0 p-0">Def Expenses</span>
-                <span className="p-0 m-0" style={{ fontSize: 10, fontStyle: "oblique" }}>this month</span>
+                <span
+                  className="p-0 m-0"
+                  style={{ fontSize: 10, fontStyle: "oblique" }}
+                >
+                  this month
+                </span>
               </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
@@ -110,9 +125,17 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
           >
             <div className="d-flex align-items-center p-2">
               <LogIcon size={22} />
-              <div className="d-flex flex-column ms-3" style={{alignItems: "flex-start"}}>
+              <div
+                className="d-flex flex-column ms-3"
+                style={{ alignItems: "flex-start" }}
+              >
                 <span className="fw-bold m-0 p-0">Other Expenses</span>
-                <span className="p-0 m-0" style={{ fontSize: 10, fontStyle: "oblique" }}>this month</span>
+                <span
+                  className="p-0 m-0"
+                  style={{ fontSize: 10, fontStyle: "oblique" }}
+                >
+                  this month
+                </span>
               </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
