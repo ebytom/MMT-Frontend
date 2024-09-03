@@ -535,7 +535,7 @@ const ExpenseSummary = () => {
       <div className="w-100 d-flex justify-content-center mt-5">
         <Button
           type="primary"
-          style={{background: 'green'}}
+          style={{background: 'green', marginBottom: 30}}
           icon={<FileExcelOutlined style={{ fontSize: 22 }} size={32} />}
           size={"large"}
           disabled={expensesList.length ? false : true}
