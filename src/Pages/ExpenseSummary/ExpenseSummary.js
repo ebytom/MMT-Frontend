@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, ConfigProvider, FloatButton, Table } from "antd";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { PlusOutlined, FileExcelOutlined } from "@ant-design/icons";
 import ExpenseModal from "../../Components/ExpenseModal/ExpenseModal";
 import { Axios } from "../../Config/Axios/Axios";
@@ -129,7 +129,6 @@ const apis = {
     getAllExpenses: "getAllFuelExpensesByTruckId",
     deleteAPI: "deleteFuelExpenseById",
     downloadAPI: "downloadFuelExpensesExcel",
-    
   },
   defExpenses: {
     addAPI: "addDefExpense",
@@ -137,7 +136,6 @@ const apis = {
     getAllExpenses: "getAllDefExpensesByTruckId",
     deleteAPI: "deleteDefExpenseById",
     downloadAPI: "downloadDefExpensesExcel",
-
   },
   otherExpenses: {
     addAPI: "addOtherExpense",
@@ -152,8 +150,6 @@ function getDeleteApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
     return expense.deleteAPI;
-  } else {
-    throw new Error(`Invalid expense type: ${expenseType}`);
   }
 }
 
@@ -161,8 +157,6 @@ function getAllApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
     return expense.getAllExpenses;
-  } else {
-    throw new Error(`Invalid expense type: ${expenseType}`);
   }
 }
 
@@ -170,8 +164,6 @@ function getDownloadApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
     return expense.downloadAPI;
-  } else {
-    throw new Error(`Invalid expense type: ${expenseType}`);
   }
 }
 
@@ -193,19 +185,16 @@ const ExpenseSummary = () => {
   const location = useLocation();
   const expenseModalRef = useRef();
 
+  const { catalog, vehicleId } = useParams();
+
   useEffect(() => {
     setContentLoader(true);
-    Axios.get(
-      `/api/v1/app/${location.pathname.split("/")[3]}/${getAllApiEndpoints(
-        location.pathname.split("/")[3]
-      )}`,
-      {
-        params: {
-          truckId: location.pathname.split("/")[2],
-          selectedDates,
-        },
-      }
-    )
+    Axios.get(`/api/v1/app/${catalog}/${getAllApiEndpoints(catalog)}`, {
+      params: {
+        truckId: vehicleId,
+        selectedDates,
+      },
+    })
       .then((res) => {
         setExpensesList(res.data.expenses);
         setTotalExpense(res.data.totalExpense || 0);
@@ -221,17 +210,12 @@ const ExpenseSummary = () => {
 
   const refreshExpenses = () => {
     setContentLoader(true);
-    Axios.get(
-      `/api/v1/app/${location.pathname.split("/")[3]}/${getAllApiEndpoints(
-        location.pathname.split("/")[3]
-      )}`,
-      {
-        params: {
-          truckId: location.pathname.split("/")[2],
-          selectedDates,
-        },
-      }
-    )
+    Axios.get(`/api/v1/app/${catalog}/${getAllApiEndpoints(catalog)}`, {
+      params: {
+        truckId: vehicleId,
+        selectedDates,
+      },
+    })
       .then((res) => {
         setExpensesList(res.data.expenses);
         setTotalExpense(res.data.totalExpense || 0);
@@ -247,8 +231,8 @@ const ExpenseSummary = () => {
 
   const handleOk = (id) => {
     Axios.delete(
-      `/api/v1/app/${location.pathname.split("/")[3]}/${getDeleteApiEndpoints(
-        location.pathname.split("/")[3]
+      `/api/v1/app/${catalog}/${getDeleteApiEndpoints(
+        catalog
       )}/${id}`,
       { params: { id } }
     )
@@ -280,30 +264,30 @@ const ExpenseSummary = () => {
     setContentLoader(true);
     try {
       const response = await Axios.get(
-        `/api/v1/app/${location.pathname.split("/")[3]}/${getDownloadApiEndpoints(
-          location.pathname.split("/")[3]
-        )}`,
+        `/api/v1/app/${
+          catalog
+        }/${getDownloadApiEndpoints(catalog)}`,
         {
           params: {
-            truckId: location.pathname.split("/")[2],
-            selectedDates
+            truckId: vehicleId,
+            selectedDates,
           },
-          responseType: 'blob' // Important to receive response as Blob
+          responseType: "blob", // Important to receive response as Blob
         }
       );
-  
+
       setContentLoader(false);
-  
+
       // Create a URL for the Blob
       const url = URL.createObjectURL(new Blob([response.data]));
-  
+
       // Create a link element and simulate a click to download the file
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `${location.pathname.split("/")[3]}.xlsx`);
+      link.setAttribute("download", `${catalog}.xlsx`);
       document.body.appendChild(link);
       link.click();
-  
+
       // Clean up
       URL.revokeObjectURL(url);
       document.body.removeChild(link);
@@ -524,7 +508,7 @@ const ExpenseSummary = () => {
       </div>
       <hr></hr>
       <Table
-        columns={tableColumns[location.pathname.split("/")[3]]}
+        columns={tableColumns[catalog]}
         dataSource={expensesList}
         scroll={{
           x: 1500,
@@ -535,7 +519,7 @@ const ExpenseSummary = () => {
       <div className="w-100 d-flex justify-content-center mt-5">
         <Button
           type="primary"
-          style={{background: 'green', marginBottom: 30}}
+          style={{ background: "green", marginBottom: 30 }}
           icon={<FileExcelOutlined style={{ fontSize: 22 }} size={32} />}
           size={"large"}
           disabled={expensesList.length ? false : true}
@@ -563,8 +547,8 @@ const ExpenseSummary = () => {
         ref={expenseModalRef}
         setExpensesList={setExpensesList}
         expensesList={expensesList}
-        category={expenses[location.pathname.split("/")[3]]}
-        formFields={formFields[location.pathname.split("/")[3]]}
+        category={expenses[catalog]}
+        formFields={formFields[catalog]}
         apis={apis}
         onSuccess={refreshExpenses}
       />

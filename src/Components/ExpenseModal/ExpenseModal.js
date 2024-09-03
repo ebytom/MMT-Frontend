@@ -7,7 +7,7 @@ import React, {
 import { Button, Form, Input, Modal, Select } from "antd";
 import { Axios } from "../../Config/Axios/Axios";
 import LoaderOverlay from "../LoaderOverlay/LoaderOverlay";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { UserContext } from "../../App";
 import DatePicker from "react-date-picker";
 import dayjs from "dayjs";
@@ -30,12 +30,11 @@ const ExpenseModal = forwardRef(
       const expense = apis[expenseType];
       if (expense) {
         return expense.addAPI;
-      } else {
-        throw new Error(`Invalid expense type: ${expenseType}`);
       }
     }
 
     const location = useLocation();
+    const { catalog, vehicleId } = useParams();
 
     const showModal = () => {
       setOpen(true);
@@ -66,17 +65,15 @@ const ExpenseModal = forwardRef(
 
         setContentLoader(true);
         // Convert date string to timestamp
-        const timestampedValues = { ...values, date: new Date(values.date).valueOf() };
-        Axios.post(
-          `/api/v1/app/${location.pathname.split("/")[3]}/${getApiEndpoints(
-            location.pathname.split("/")[3]
-          )}`,
-          {
-            ...timestampedValues,
-            addedBy: user.userId,
-            truckId: location.pathname.split("/")[2],
-          }
-        )
+        const timestampedValues = {
+          ...values,
+          date: new Date(values.date).valueOf(),
+        };
+        Axios.post(`/api/v1/app/${catalog}/${getApiEndpoints(catalog)}`, {
+          ...timestampedValues,
+          addedBy: user.userId,
+          truckId: vehicleId,
+        })
           .then((res) => {
             setContentLoader(false);
             form.resetFields();
@@ -93,10 +90,9 @@ const ExpenseModal = forwardRef(
         console.error("Form submission failed:", error);
       }
     };
-    
 
     const renderFormFields = () => {
-      return formFields.map((field) => {
+      return formFields?.map((field) => {
         if (field.name === "other" && selectedCategory !== "other") {
           return null; // Skip rendering if 'other' is disabled
         }
@@ -108,7 +104,7 @@ const ExpenseModal = forwardRef(
                 label={field.label}
                 name={field.name}
                 rules={field.rules}
-                initialValue={moment().format("YYYY-MM-DD")} 
+                initialValue={moment().format("YYYY-MM-DD")}
               >
                 {/* <DatePicker
                   format="YYYY-MM-DD"
@@ -155,7 +151,7 @@ const ExpenseModal = forwardRef(
                   placeholder={field.placeholder}
                   onChange={handleCategoryChange}
                 >
-                  {field.options.map((option) => (
+                  {field?.options?.map((option) => (
                     <Option key={option.value} value={option.value}>
                       {option.label}
                     </Option>
@@ -164,14 +160,14 @@ const ExpenseModal = forwardRef(
               </Form.Item>
             );
           default:
-            return null;
+            return <></>;
         }
       });
     };
 
-    const initialValues = formFields.reduce((acc, field) => {
+    const initialValues = formFields?.reduce((acc, field) => {
       if (field.type === "date") {
-        acc[field.name] = dayjs().format("YYYY-MM-DD") // Set initial value as current timestamp
+        acc[field.name] = dayjs().format("YYYY-MM-DD");
       }
       return acc;
     }, {});

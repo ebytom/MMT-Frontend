@@ -57,7 +57,7 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
               justifyContent: "space-between",
             }}
             onClick={() =>
-              navigate(`/expenseSummary/${vehicleId}/fuelExpenses`)
+              navigate(`/expenseSummary/fuelExpenses/${vehicleId}`)
             }
           >
             <div className="d-flex align-items-center p-2">
@@ -81,7 +81,7 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
               display: "flex",
               justifyContent: "space-between",
             }}
-            onClick={() => navigate(`/expenseSummary/${vehicleId}/defExpenses`)}
+            onClick={() => navigate(`/expenseSummary/defExpenses/${vehicleId}`)}
           >
             <div className="d-flex align-items-center p-2">
               <AppsIcon size={22} />
@@ -105,7 +105,7 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
               justifyContent: "space-between",
             }}
             onClick={() =>
-              navigate(`/expenseSummary/${vehicleId}/otherExpenses`)
+              navigate(`/expenseSummary/otherExpenses/${vehicleId}`)
             }
           >
             <div className="d-flex align-items-center p-2">

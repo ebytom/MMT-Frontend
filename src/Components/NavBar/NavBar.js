@@ -22,7 +22,7 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const truckId = loc.pathname.split("/")[2];
+    const truckId = loc.pathname.split("/")[3];
     if (truckId) {
       Axios.get(`/api/v1/app/truck/getTruckById/${truckId}`)
         .then((res) => {
@@ -64,7 +64,7 @@ const NavBar = () => {
           </Button>
           <div>
             <b className="text-white fw-800 fs-5">
-              {registrationNo ? registrationNo : "Truck"} - {expenses[loc.pathname.split("/")[3]]}
+              {registrationNo ? registrationNo : "Truck"} - {expenses[loc.pathname.split("/")[2]]}
             </b>
           </div>
           <div></div>

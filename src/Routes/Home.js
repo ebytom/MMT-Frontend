@@ -14,8 +14,7 @@ const Home = () => {
             <NavBar />
             <Switch>
                 <Route path="/dashboard" element={<Dashboard />} />
-                {/* <Route path="/expenseSummary" element={<ExpenseSummary />} /> */}
-                <Route path="/expenseSummary/:vehicleRegistrationNo/:catalog" element={<ExpenseSummary />} />
+                <Route path="/expenseSummary/:catalog/:vehicleId" element={<ExpenseSummary />} />
                 <Route path="/*"  element={<Navigate to="/dashboard" replace />} />
             </Switch>
         </div>
