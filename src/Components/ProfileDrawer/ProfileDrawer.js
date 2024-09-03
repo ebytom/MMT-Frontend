@@ -1,5 +1,11 @@
 import { Divider, Drawer, FloatButton } from "antd";
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { googleLogout } from "@react-oauth/google";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { CloseOutlined } from "@ant-design/icons";
@@ -13,17 +19,17 @@ const UnreachableContext = createContext(null);
 
 const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
   const [userCredentials, setuserCredentials] = useState(null);
-  const [metadata, setMetadata] = useState({})
-  const [isError, setIsError] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [metadata, setMetadata] = useState({});
+  const [isError, setIsError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     // const userCred = jwtDecode(localStorage.getItem("token"));
     // setuserCredentials(userCred);
 
-    setLoading(true)
+    setLoading(true);
 
     Axios.get(`/api/v1/app/metadata/getProfileMetadataByUserId`, {
       params: {
@@ -132,7 +138,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
               title="Confirm Action"
               content="Are you sure you want to signout?"
               onOk={handleOk}
-              onCancel={()=>{}}
+              onCancel={() => {}}
             >
               <button
                 type="button"
@@ -160,7 +166,7 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
         </div>
       </div>
       <div className="w-100 d-flex justify-content-center mt-4">
-        <p style={{color: "#808080", fontSize: 12}}>Developed by codhub</p>
+        <p style={{ color: "#808080", fontSize: 12 }}>Developed by codhub</p>
       </div>
       <FloatButton
         shape="circle"

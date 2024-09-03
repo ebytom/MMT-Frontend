@@ -16,6 +16,10 @@ const NavBar = () => {
     fuelExpenses: "Fuel Expenses",
     defExpenses: "Def Expenses",
     otherExpenses: "Other Expenses",
+    totalExpenses: "Total Expenses",
+    totalFuelExpenses: "Total Fuel Expenses",
+    totalDefExpenses: "Total Def Expenses",
+    totalOtherExpenses: "Total Other Expenses",
   });
 
   const loc = useLocation();

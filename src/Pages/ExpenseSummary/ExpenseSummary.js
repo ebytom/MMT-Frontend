@@ -172,6 +172,10 @@ const ExpenseSummary = () => {
     fuelExpenses: "Fuel Expenses",
     defExpenses: "Def Expenses",
     otherExpenses: "Other Expenses",
+    totalExpenses: "Total Expenses",
+    totalFuelExpenses: "Total Fuel Expenses",
+    totalDefExpenses: "Total Def Expenses",
+    totalOtherExpenses: "Total Other Expenses",
   });
   const [contentLoader, setContentLoader] = useState(true);
   const [expensesList, setExpensesList] = useState([]);
