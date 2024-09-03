@@ -1,10 +1,14 @@
 import { Card, Statistic } from 'antd'
 import { ArrowUpOutlined } from '@ant-design/icons';
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const StatisticCard = (props) => {
+
+  const nav = useNavigate()
+
   return (
-    <Card hoverable bordered={false} style={{background: '#59a4ff'}}>
+    <Card hoverable bordered={false} style={{background: '#59a4ff'}} onClick={()=>{nav(props.route)}}>
         <div className='d-flex align-items-center justify-content-between'>
         <Statistic
           title={props.title}

@@ -86,6 +86,7 @@ const Dashboard = () => {
             }
             value={metadata.monthlyExpenses?.monthlyGrandTotal}
             thisMonth={metadata.grandTotal}
+            route={'/expenseSummary/totalExpenses'}
           />
           <StatisticCard
             title={
@@ -101,6 +102,7 @@ const Dashboard = () => {
             }
             thisMonth={metadata.fuelTotal}
             value={metadata.monthlyExpenses?.fuel}
+            route={'/expenseSummary/totalFuelExpenses'}
           />
           <StatisticCard
           
@@ -117,6 +119,7 @@ const Dashboard = () => {
           }
             thisMonth={metadata.defTotal}
             value={metadata.monthlyExpenses?.def}
+            route={'/expenseSummary/totalDefExpenses'}
           />
           <StatisticCard
              title={
@@ -132,6 +135,7 @@ const Dashboard = () => {
             }
             thisMonth={metadata.otherTotal}
             value={metadata.monthlyExpenses?.other}
+            route={'/expenseSummary/totalOtherExpenses'}
           />
           <StatisticCard
              title={
@@ -147,6 +151,7 @@ const Dashboard = () => {
             }
             thisMonth={metadata.fuelUsedTotal}
             value={metadata.monthlyExpenses?.fuelUsed}
+            route={null}
           />
         </div>
       )}
