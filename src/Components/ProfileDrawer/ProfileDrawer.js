@@ -1,8 +1,7 @@
-import { Divider, Drawer, FloatButton, Modal } from "antd";
+import { Divider, Drawer, FloatButton } from "antd";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
-import { jwtDecode } from "jwt-decode";
 import { CloseOutlined } from "@ant-design/icons";
 import GetHelpModal from "../GetHelpModal/GetHelpModal";
 import PrivacyPolicyModal from "../PrivacyPolicyModal/PrivacyPolicyModal";
@@ -21,8 +20,8 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
   const {user} = useContext(UserContext);
 
   useEffect(() => {
-    const userCred = jwtDecode(localStorage.getItem("token"));
-    setuserCredentials(userCred);
+    // const userCred = jwtDecode(localStorage.getItem("token"));
+    // setuserCredentials(userCred);
 
     setLoading(true)
 
@@ -88,8 +87,8 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
           <div className="mt-3 mb-4">
             <img
               src={
-                userCredentials?.picture
-                  ? userCredentials.picture
+                user?.picture
+                  ? user.picture
                   : "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
               }
               className="rounded-circle img-fluid"
@@ -97,10 +96,10 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
               alt="User"
             />
           </div>
-          <h4 className="mb-2">{userCredentials?.name}</h4>
+          <h4 className="mb-2">{user?.name}</h4>
           <p className="text-muted mb-4">
             {/* 8547520864 <span className="mx-2">|</span>  */}
-            {userCredentials?.email}
+            {user?.email}
           </p>
           <div className="mb-4 pb-2 d-flex flex-column gap-2">
             <button
