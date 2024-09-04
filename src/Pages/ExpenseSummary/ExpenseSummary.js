@@ -148,11 +148,11 @@ const apis = {
     getAllExpensesById: "getAllOtherExpensesByTruckId",
     getAllExpenses: "getAllOtherExpensesByUserId",
     deleteAPI: "deleteOtherExpenseById",
-    downloadAPI: "downloadDefExpensesExcel",
+    downloadAPI: "downloadOtherExpensesExcel",
     downloadAllAPI: "downloadAllOtherExpensesExcel",
   },
   totalExpenses: {
-    getAllExpenses: "getAlltotalExpensesByUserId",
+    getAllExpenses: "getAllTotalExpensesByUserId",
     downloadAllAPI: "downloadAllTotalExpensesExcel",
   },
 };
@@ -532,6 +532,12 @@ const ExpenseSummary = () => {
         dataIndex: "date",
         key: "date",
         fixed: "left",
+      },
+      {
+        title: "Registration No.",
+        width: 100,
+        dataIndex: "registrationNo",
+        key: "registrationNo",
       },
       {
         title: "Type",
