@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, ConfigProvider, FloatButton, Table } from "antd";
 import { useLocation, useParams } from "react-router-dom";
 import { PlusOutlined, FileExcelOutlined } from "@ant-design/icons";
@@ -10,6 +10,7 @@ import { DatePicker, Space } from "antd";
 import dayjs from "dayjs";
 import ConfirmModal from "../../Components/ConfirmModal/ConfirmModal";
 import { ArrowRightIcon } from "@primer/octicons-react";
+import { UserContext } from "../../App";
 // import locale from 'antd/locale/en_GB';
 // import 'dayjs/locale/en-gb';
 
@@ -126,23 +127,33 @@ const apis = {
   fuelExpenses: {
     addAPI: "addFuelExpense",
     updateAPI: "updateFuelExpense",
-    getAllExpenses: "getAllFuelExpensesByTruckId",
+    getAllExpensesById: "getAllFuelExpensesByTruckId",
+    getAllExpenses: "getAllFuelExpensesByUserId",
     deleteAPI: "deleteFuelExpenseById",
     downloadAPI: "downloadFuelExpensesExcel",
+    downloadAllAPI: "downloadAllFuelExpensesExcel",
   },
   defExpenses: {
     addAPI: "addDefExpense",
     updateAPI: "updateDefExpense",
-    getAllExpenses: "getAllDefExpensesByTruckId",
+    getAllExpensesById: "getAllDefExpensesByTruckId",
+    getAllExpenses: "getAllDefExpensesByUserId",
     deleteAPI: "deleteDefExpenseById",
     downloadAPI: "downloadDefExpensesExcel",
+    downloadAllAPI: "downloadAllDefExpensesExcel",
   },
   otherExpenses: {
     addAPI: "addOtherExpense",
     updateAPI: "updateOtherExpense",
-    getAllExpenses: "getAllOtherExpensesByTruckId",
+    getAllExpensesById: "getAllOtherExpensesByTruckId",
+    getAllExpenses: "getAllOtherExpensesByUserId",
     deleteAPI: "deleteOtherExpenseById",
-    downloadAPI: "downloadOtherExpensesExcel",
+    downloadAPI: "downloadDefExpensesExcel",
+    downloadAllAPI: "downloadAllOtherExpensesExcel",
+  },
+  totalExpenses: {
+    getAllExpenses: "getAlltotalExpensesByUserId",
+    downloadAllAPI: "downloadAllTotalExpensesExcel",
   },
 };
 
@@ -150,6 +161,13 @@ function getDeleteApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
     return expense.deleteAPI;
+  }
+}
+
+function getAllByIdApiEndpoints(expenseType) {
+  const expense = apis[expenseType];
+  if (expense) {
+    return expense.getAllExpensesById;
   }
 }
 
@@ -164,6 +182,13 @@ function getDownloadApiEndpoints(expenseType) {
   const expense = apis[expenseType];
   if (expense) {
     return expense.downloadAPI;
+  }
+}
+
+function getDownloadAllApiEndpoints(expenseType) {
+  const expense = apis[expenseType];
+  if (expense) {
+    return expense.downloadAllAPI;
   }
 }
 
@@ -188,35 +213,58 @@ const ExpenseSummary = () => {
 
   const location = useLocation();
   const expenseModalRef = useRef();
+  const { user } = useContext(UserContext);
 
   const { catalog, vehicleId } = useParams();
 
   useEffect(() => {
     setContentLoader(true);
-    Axios.get(`/api/v1/app/${catalog}/${getAllApiEndpoints(catalog)}`, {
-      params: {
-        truckId: vehicleId,
-        selectedDates,
-      },
-    })
-      .then((res) => {
-        setExpensesList(res.data.expenses);
-        setTotalExpense(res.data.totalExpense || 0);
-        setContentLoader(false);
+    if (vehicleId) {
+      Axios.get(`/api/v1/app/${catalog}/${getAllByIdApiEndpoints(catalog)}`, {
+        params: {
+          truckId: vehicleId,
+          selectedDates,
+        },
       })
-      .catch((err) => {
-        setExpensesList([]);
-        setTotalExpense(0);
-        setIsError(true);
-        setContentLoader(false);
-      });
+        .then((res) => {
+          setExpensesList(res.data.expenses);
+          setTotalExpense(res.data.totalExpense || 0);
+          setContentLoader(false);
+        })
+        .catch((err) => {
+          setExpensesList([]);
+          setTotalExpense(0);
+          setIsError(true);
+          setContentLoader(false);
+        });
+    } else {
+      Axios.get(`/api/v1/app/${catalog}/${getAllApiEndpoints(catalog)}`, {
+        params: {
+          userId: user.userId,
+          selectedDates,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+
+          setExpensesList(res.data.expenses);
+          setTotalExpense(res.data.totalExpense || 0);
+          setContentLoader(false);
+        })
+        .catch((err) => {
+          setExpensesList([]);
+          setTotalExpense(0);
+          setIsError(true);
+          setContentLoader(false);
+        });
+    }
   }, [selectedDates]);
 
   const refreshExpenses = () => {
     setContentLoader(true);
-    Axios.get(`/api/v1/app/${catalog}/${getAllApiEndpoints(catalog)}`, {
+    Axios.get(`/api/v1/app/${catalog}/${getAllByIdApiEndpoints(catalog)}`, {
       params: {
-        truckId: vehicleId,
+        userId: user,
         selectedDates,
       },
     })
@@ -235,9 +283,7 @@ const ExpenseSummary = () => {
 
   const handleOk = (id) => {
     Axios.delete(
-      `/api/v1/app/${catalog}/${getDeleteApiEndpoints(
-        catalog
-      )}/${id}`,
+      `/api/v1/app/${catalog}/${getDeleteApiEndpoints(catalog)}/${id}`,
       { params: { id } }
     )
       .then(() => {
@@ -267,18 +313,31 @@ const ExpenseSummary = () => {
   const handleReportDownload = async () => {
     setContentLoader(true);
     try {
-      const response = await Axios.get(
-        `/api/v1/app/${
-          catalog
-        }/${getDownloadApiEndpoints(catalog)}`,
-        {
-          params: {
-            truckId: vehicleId,
-            selectedDates,
-          },
-          responseType: "blob", // Important to receive response as Blob
+      let response;
+
+        if (vehicleId) {
+            response = await Axios.get(
+                `/api/v1/app/${catalog}/${getDownloadApiEndpoints(catalog)}`,
+                {
+                    params: {
+                        truckId: vehicleId,
+                        selectedDates,
+                    },
+                    responseType: "blob", // Important to receive response as Blob
+                }
+            );
+        } else {
+            response = await Axios.get(
+                `/api/v1/app/${catalog}/${getDownloadAllApiEndpoints(catalog)}`,
+                {
+                    params: {
+                        userId: user.userId,
+                        selectedDates,
+                    },
+                    responseType: "blob", // Important to receive response as Blob
+                }
+            );
         }
-      );
 
       setContentLoader(false);
 
@@ -466,6 +525,33 @@ const ExpenseSummary = () => {
         ),
       },
     ],
+    totalExpenses: [
+      {
+        title: "Date",
+        width: 50,
+        dataIndex: "date",
+        key: "date",
+        fixed: "left",
+      },
+      {
+        title: "Type",
+        width: 100,
+        dataIndex: "catalog",
+        key: "catalog",
+      },
+      {
+        title: "Cost",
+        width: 100,
+        dataIndex: "cost",
+        key: "cost",
+      },
+      {
+        title: "Note",
+        width: 100,
+        dataIndex: "note",
+        key: "note",
+      },
+    ],
   };
 
   return (
@@ -532,21 +618,23 @@ const ExpenseSummary = () => {
           <b>Download Report</b>
         </Button>
       </div>
-      <FloatButton
-        shape="circle"
-        type="primary"
-        style={{
-          insetInlineEnd: "6%",
-          height: 80,
-          width: 80,
-          padding: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        onClick={callExpenseModal}
-        icon={<PlusOutlined style={{ fontSize: 20 }} />}
-      />
+      {vehicleId && (
+        <FloatButton
+          shape="circle"
+          type="primary"
+          style={{
+            insetInlineEnd: "6%",
+            height: 80,
+            width: 80,
+            padding: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={callExpenseModal}
+          icon={<PlusOutlined style={{ fontSize: 20 }} />}
+        />
+      )}
       <ExpenseModal
         ref={expenseModalRef}
         setExpensesList={setExpensesList}

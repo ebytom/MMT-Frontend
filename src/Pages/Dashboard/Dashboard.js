@@ -100,7 +100,7 @@ const Dashboard = () => {
             }
             thisMonth={metadata.fuelTotal}
             value={metadata.monthlyExpenses?.fuel}
-            route={'/expenseSummary/totalFuelExpenses'}
+            route={'/expenseSummary/fuelExpenses'}
           />
           <StatisticCard
           
@@ -117,7 +117,7 @@ const Dashboard = () => {
           }
             thisMonth={metadata.defTotal}
             value={metadata.monthlyExpenses?.def}
-            route={'/expenseSummary/totalDefExpenses'}
+            route={'/expenseSummary/defExpenses'}
           />
           <StatisticCard
              title={
@@ -133,7 +133,7 @@ const Dashboard = () => {
             }
             thisMonth={metadata.otherTotal}
             value={metadata.monthlyExpenses?.other}
-            route={'/expenseSummary/totalOtherExpenses'}
+            route={'/expenseSummary/otherExpenses'}
           />
           <StatisticCard
              title={
