@@ -360,6 +360,21 @@ const ExpenseSummary = () => {
     }
   };
 
+  const addRegistrationNoColumn = (columns) => {
+    if (vehicleId) {
+      return [
+        {
+          title: "Registration No.",
+          width: 100,
+          dataIndex: "registrationNo",
+          key: "registrationNo",
+        },
+        ...columns,
+      ];
+    }
+    return columns;
+  };
+
   const tableColumns = {
     fuelExpenses: [
       {
@@ -369,6 +384,12 @@ const ExpenseSummary = () => {
         key: "date",
         fixed: "left",
       },
+      ...(!vehicleId ? [{
+        title: "Registration No.",
+        width: 100,
+        dataIndex: "registrationNo",
+        key: "registrationNo",
+      }] : []),
       {
         title: "Current KM",
         width: 100,
@@ -429,6 +450,12 @@ const ExpenseSummary = () => {
         key: "date",
         fixed: "left",
       },
+      ...(!vehicleId ? [{
+        title: "Registration No.",
+        width: 100,
+        dataIndex: "registrationNo",
+        key: "registrationNo",
+      }] : []),
       {
         title: "Current KM",
         width: 100,
@@ -484,6 +511,12 @@ const ExpenseSummary = () => {
         key: "date",
         fixed: "left",
       },
+      ...(!vehicleId ? [{
+        title: "Registration No.",
+        width: 100,
+        dataIndex: "registrationNo",
+        key: "registrationNo",
+      }] : []),
       {
         title: "Category",
         width: 100,
@@ -559,6 +592,7 @@ const ExpenseSummary = () => {
       },
     ],
   };
+  
 
   return (
     <>
