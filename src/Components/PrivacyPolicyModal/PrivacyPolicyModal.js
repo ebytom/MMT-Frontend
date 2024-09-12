@@ -23,7 +23,7 @@ const PrivacyPolicyModal = forwardRef(({}, ref) => {
       open={isModalOpen}
       onOk={handleOk}
       onCancel={handleCancel}
-      footer={null}
+      footer={null}l
     >
       <div className="mt-4 p-2" style={{ fontFamily: 'Arial, sans-serif', textAlign: 'justify' }}>
         <b>Information We Collect</b>

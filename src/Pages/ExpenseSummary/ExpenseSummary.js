@@ -408,7 +408,7 @@ const ExpenseSummary = () => {
         dataIndex: "cost",
         key: "cost",
       },
-      {
+      ...(vehicleId ? [{
         title: "Range",
         width: 100,
         dataIndex: "range",
@@ -419,7 +419,7 @@ const ExpenseSummary = () => {
         width: 100,
         dataIndex: "mileage",
         key: "mileage",
-      },
+      }] : []),
       {
         title: "Action",
         key: "operation",
@@ -463,17 +463,17 @@ const ExpenseSummary = () => {
         key: "currentKM",
       },
       {
-        title: "Range",
-        width: 100,
-        dataIndex: "range",
-        key: "range",
-      },
-      {
         title: "Litres",
         width: 100,
         dataIndex: "litres",
         key: "litres",
       },
+      ...(vehicleId ? [{
+        title: "Range",
+        width: 100,
+        dataIndex: "range",
+        key: "range",
+      }] : []),
       {
         title: "Cost",
         width: 100,
