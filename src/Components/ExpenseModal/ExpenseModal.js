@@ -15,6 +15,8 @@ import moment from "moment";
 
 const { Option } = Select;
 
+const token = localStorage.getItem('token')
+
 const ExpenseModal = forwardRef(
   ({ addExpense, category, formFields, apis, onSuccess }, ref) => {
     const [open, setOpen] = useState(false);
@@ -69,11 +71,19 @@ const ExpenseModal = forwardRef(
           ...values,
           date: new Date(values.date).valueOf(),
         };
-        Axios.post(`/api/v1/app/${catalog}/${getApiEndpoints(catalog)}`, {
-          ...timestampedValues,
-          addedBy: user.userId,
-          truckId: vehicleId,
-        })
+        Axios.post(
+          `/api/v1/app/${catalog}/${getApiEndpoints(catalog)}`,
+          {
+            ...timestampedValues,
+            addedBy: user.userId,
+            truckId: vehicleId,
+          },
+          {
+            headers: {
+              authorization: `bearer ${token}`,
+            },
+          }
+        )
           .then((res) => {
             setContentLoader(false);
             form.resetFields();

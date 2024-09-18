@@ -16,11 +16,16 @@ const Dashboard = () => {
   const [metadata, setMetadata] = useState([]);
   const { user } = useContext(UserContext);
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
     setContentLoader(true);
     Axios.get(`/api/v1/app/truck/getAllTrucksByUser/${user.userId}`, {
       params: {
         addedBy: user.userId,
+      },
+      headers: {
+        authorization: `bearer ${token}`,
       },
     })
       .then((res) => {
@@ -37,9 +42,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     setAnalyticsLoader(true);
+    console.log(token);
+    
     Axios.get(`/api/v1/app/metadata/getMetadataByUserId`, {
       params: {
         userId: user.userId,
+      },
+      headers: {
+        authorization: `bearer ${token}`,
       },
     })
       .then((res) => {

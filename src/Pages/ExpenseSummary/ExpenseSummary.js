@@ -18,6 +18,8 @@ import { UserContext } from "../../App";
 
 const { RangePicker } = DatePicker;
 
+const token = localStorage.getItem("token");
+
 const formFields = {
   fuelExpenses: [
     {
@@ -225,6 +227,9 @@ const ExpenseSummary = () => {
           truckId: vehicleId,
           selectedDates,
         },
+        headers: {
+          authorization: `bearer ${token}`,
+        },
       })
         .then((res) => {
           setExpensesList(res.data.expenses);
@@ -242,6 +247,9 @@ const ExpenseSummary = () => {
         params: {
           userId: user.userId,
           selectedDates,
+        },
+        headers: {
+          authorization: `bearer ${token}`,
         },
       })
         .then((res) => {
@@ -262,32 +270,66 @@ const ExpenseSummary = () => {
 
   const refreshExpenses = () => {
     setContentLoader(true);
-    Axios.get(`/api/v1/app/${catalog}/${getAllByIdApiEndpoints(catalog)}`, {
-      params: {
-        userId: user,
-        selectedDates,
-      },
-    })
-      .then((res) => {
-        setExpensesList(res.data.expenses);
-        setTotalExpense(res.data.totalExpense || 0);
-        setContentLoader(false);
+    if (vehicleId) {
+      Axios.get(`/api/v1/app/${catalog}/${getAllByIdApiEndpoints(catalog)}`, {
+        params: {
+          truckId: vehicleId,
+          selectedDates,
+        },
+        headers: {
+          authorization: `bearer ${token}`,
+        },
       })
-      .catch((err) => {
-        setExpensesList([]);
-        setTotalExpense(0);
-        setIsError(true);
-        setContentLoader(false);
-      });
+        .then((res) => {
+          setExpensesList(res.data.expenses);
+          setTotalExpense(res.data.totalExpense || 0);
+          setContentLoader(false);
+        })
+        .catch((err) => {
+          setExpensesList([]);
+          setTotalExpense(0);
+          setIsError(true);
+          setContentLoader(false);
+        });
+    } else {
+      Axios.get(`/api/v1/app/${catalog}/${getAllApiEndpoints(catalog)}`, {
+        params: {
+          userId: user.userId,
+          selectedDates,
+        },
+        headers: {
+          authorization: `bearer ${token}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+
+          setExpensesList(res.data.expenses);
+          setTotalExpense(res.data.totalExpense || 0);
+          setContentLoader(false);
+        })
+        .catch((err) => {
+          setExpensesList([]);
+          setTotalExpense(0);
+          setIsError(true);
+          setContentLoader(false);
+        });
+    }
   };
 
   const handleOk = (id) => {
     Axios.delete(
       `/api/v1/app/${catalog}/${getDeleteApiEndpoints(catalog)}/${id}`,
-      { params: { id } }
+      {
+        params: { id },
+        headers: {
+          authorization: `bearer ${token}`,
+        },
+      }
     )
       .then(() => {
-        setSelectedDates([dayjs().subtract(1, "month"), dayjs()]);
+        refreshExpenses()
+        // setSelectedDates([dayjs().subtract(1, "month"), dayjs()]);
       })
       .catch((err) => {
         console.error("Failed to delete expense:", err);
@@ -315,29 +357,35 @@ const ExpenseSummary = () => {
     try {
       let response;
 
-        if (vehicleId) {
-            response = await Axios.get(
-                `/api/v1/app/${catalog}/${getDownloadApiEndpoints(catalog)}`,
-                {
-                    params: {
-                        truckId: vehicleId,
-                        selectedDates,
-                    },
-                    responseType: "blob", // Important to receive response as Blob
-                }
-            );
-        } else {
-            response = await Axios.get(
-                `/api/v1/app/${catalog}/${getDownloadAllApiEndpoints(catalog)}`,
-                {
-                    params: {
-                        userId: user.userId,
-                        selectedDates,
-                    },
-                    responseType: "blob", // Important to receive response as Blob
-                }
-            );
-        }
+      if (vehicleId) {
+        response = await Axios.get(
+          `/api/v1/app/${catalog}/${getDownloadApiEndpoints(catalog)}`,
+          {
+            params: {
+              truckId: vehicleId,
+              selectedDates,
+            },
+            responseType: "blob", // Important to receive response as Blob
+            headers: {
+              authorization: `bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        response = await Axios.get(
+          `/api/v1/app/${catalog}/${getDownloadAllApiEndpoints(catalog)}`,
+          {
+            params: {
+              userId: user.userId,
+              selectedDates,
+            },
+            responseType: "blob", // Important to receive response as Blob
+            headers: {
+              authorization: `bearer ${token}`,
+            },
+          }
+        );
+      }
 
       setContentLoader(false);
 
@@ -384,12 +432,16 @@ const ExpenseSummary = () => {
         key: "date",
         fixed: "left",
       },
-      ...(!vehicleId ? [{
-        title: "Registration No.",
-        width: 100,
-        dataIndex: "registrationNo",
-        key: "registrationNo",
-      }] : []),
+      ...(!vehicleId
+        ? [
+            {
+              title: "Registration No.",
+              width: 100,
+              dataIndex: "registrationNo",
+              key: "registrationNo",
+            },
+          ]
+        : []),
       {
         title: "Current KM",
         width: 100,
@@ -408,18 +460,22 @@ const ExpenseSummary = () => {
         dataIndex: "cost",
         key: "cost",
       },
-      ...(vehicleId ? [{
-        title: "Range",
-        width: 100,
-        dataIndex: "range",
-        key: "range",
-      },
-      {
-        title: "Mileage",
-        width: 100,
-        dataIndex: "mileage",
-        key: "mileage",
-      }] : []),
+      ...(vehicleId
+        ? [
+            {
+              title: "Range",
+              width: 100,
+              dataIndex: "range",
+              key: "range",
+            },
+            {
+              title: "Mileage",
+              width: 100,
+              dataIndex: "mileage",
+              key: "mileage",
+            },
+          ]
+        : []),
       {
         title: "Action",
         key: "operation",
@@ -450,12 +506,16 @@ const ExpenseSummary = () => {
         key: "date",
         fixed: "left",
       },
-      ...(!vehicleId ? [{
-        title: "Registration No.",
-        width: 100,
-        dataIndex: "registrationNo",
-        key: "registrationNo",
-      }] : []),
+      ...(!vehicleId
+        ? [
+            {
+              title: "Registration No.",
+              width: 100,
+              dataIndex: "registrationNo",
+              key: "registrationNo",
+            },
+          ]
+        : []),
       {
         title: "Current KM",
         width: 100,
@@ -468,12 +528,16 @@ const ExpenseSummary = () => {
         dataIndex: "litres",
         key: "litres",
       },
-      ...(vehicleId ? [{
-        title: "Range",
-        width: 100,
-        dataIndex: "range",
-        key: "range",
-      }] : []),
+      ...(vehicleId
+        ? [
+            {
+              title: "Range",
+              width: 100,
+              dataIndex: "range",
+              key: "range",
+            },
+          ]
+        : []),
       {
         title: "Cost",
         width: 100,
@@ -511,12 +575,16 @@ const ExpenseSummary = () => {
         key: "date",
         fixed: "left",
       },
-      ...(!vehicleId ? [{
-        title: "Registration No.",
-        width: 100,
-        dataIndex: "registrationNo",
-        key: "registrationNo",
-      }] : []),
+      ...(!vehicleId
+        ? [
+            {
+              title: "Registration No.",
+              width: 100,
+              dataIndex: "registrationNo",
+              key: "registrationNo",
+            },
+          ]
+        : []),
       {
         title: "Category",
         width: 100,
@@ -592,7 +660,6 @@ const ExpenseSummary = () => {
       },
     ],
   };
-  
 
   return (
     <>

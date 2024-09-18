@@ -24,6 +24,7 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
   const [deleteForm] = Form.useForm();
 
   const { user } = useContext(UserContext);
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     setLoading(true);
@@ -94,7 +95,11 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
       if (vehicleData) {
         Axios.put(`/api/v1/app/truck/updateTruckById/${vehicleData?._id}`, {
           values,
-        })
+        },
+        {
+        headers: {
+          authorization: `bearer ${token}`,
+        }})
           .then((res) => {
             const updatedTruck = res.data;
             // setTrucks((prevTrucks) =>
@@ -116,7 +121,12 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
         Axios.post("/api/v1/app/truck/addTruck", {
           ...values,
           addedBy: user.userId,
-        })
+        },
+      {
+        headers: {
+          authorization: `bearer ${token}`,
+        },
+      })
           .then((res) => {
             setTrucks([...trucks, res.data]);
             setContentLoader(false);
@@ -138,7 +148,11 @@ const VehicleModal = forwardRef(({ setTrucks, trucks, vehicleData }, ref) => {
 
   const deleteTruck = () => {
     if (deleteTruck) {
-      Axios.delete(`/api/v1/app/truck/deleteTruckById/${vehicleData._id}`)
+      Axios.delete(`/api/v1/app/truck/deleteTruckById/${vehicleData._id}`,{
+        headers: {
+          authorization: `bearer ${token}`,
+        },
+      })
         .then(() => {
           setShowDeleteConfirm(false);
           setOpen(false);

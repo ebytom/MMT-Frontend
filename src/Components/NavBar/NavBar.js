@@ -25,11 +25,20 @@ const NavBar = () => {
   const loc = useLocation();
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
-    setTruckDetails({})
+    setTruckDetails({});
     const truckId = loc.pathname.split("/")[3];
     if (truckId) {
-      Axios.get(`/api/v1/app/truck/getTruckById/${truckId}`)
+      Axios.get(
+        `/api/v1/app/truck/getTruckById/${truckId}`,
+        {
+          headers: {
+            authorization: `bearer ${token}`,
+          },
+        }
+      )
         .then((res) => {
           setTruckDetails(res.data);
         })
@@ -69,7 +78,8 @@ const NavBar = () => {
           </Button>
           <div>
             <b className="text-white fw-800 fs-5">
-              {registrationNo ? registrationNo : "All Trucks"} - {expenses[loc.pathname.split("/")[2]]}
+              {registrationNo ? registrationNo : "All Trucks"} -{" "}
+              {expenses[loc.pathname.split("/")[2]]}
             </b>
           </div>
           <div></div>
@@ -109,7 +119,10 @@ const NavBar = () => {
       )}
 
       <MenuDrawer navOpen={navOpen} setNavOpen={setNavOpen} />
-      <ProfileDrawer profileOpen={profileOpen} setProfileOpen={setProfileOpen} />
+      <ProfileDrawer
+        profileOpen={profileOpen}
+        setProfileOpen={setProfileOpen}
+      />
     </div>
   );
 };

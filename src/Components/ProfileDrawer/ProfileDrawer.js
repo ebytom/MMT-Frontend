@@ -25,6 +25,8 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
 
   const { user } = useContext(UserContext);
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
     // const userCred = jwtDecode(localStorage.getItem("token"));
     // setuserCredentials(userCred);
@@ -34,6 +36,9 @@ const ProfileDrawer = ({ profileOpen, setProfileOpen }) => {
     Axios.get(`/api/v1/app/metadata/getProfileMetadataByUserId`, {
       params: {
         userId: user?.userId,
+      },
+      headers: {
+        authorization: `bearer ${token}`,
       },
     })
       .then((res) => {
