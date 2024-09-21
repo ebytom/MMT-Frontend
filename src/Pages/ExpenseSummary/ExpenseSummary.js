@@ -699,7 +699,7 @@ const ExpenseSummary = () => {
         >
           <b>Total Expense</b>
           <div className="p-2 border bg-white rounded fw-bold text-danger">
-            {totalExpense}
+            {totalExpense.toFixed(2)}
           </div>
         </div>
       </div>
