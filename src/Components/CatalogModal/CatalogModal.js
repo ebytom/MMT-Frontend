@@ -80,7 +80,7 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
               </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
-              <span className="fw-bold">{metadata.fuelTotal}</span>
+              <span className="fw-bold">{metadata.fuelTotal?.toFixed(2)}</span>
             </div>
           </Button>
           <Button
@@ -111,7 +111,7 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
               </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
-              <span className="fw-bold">{metadata.defTotal}</span>
+              <span className="fw-bold">{metadata.defTotal?.toFixed(2)}</span>
             </div>
           </Button>
           <Button
@@ -144,7 +144,7 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
               </div>
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
-              <span className="fw-bold">{metadata.otherTotal}</span>
+              <span className="fw-bold">{metadata.otherTotal?.toFixed(2)}</span>
             </div>
           </Button>
         </div>
