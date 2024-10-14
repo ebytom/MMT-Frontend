@@ -42,7 +42,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     setAnalyticsLoader(true);
-    console.log(token);
     
     Axios.get(`/api/v1/app/metadata/getMetadataByUserId`, {
       params: {

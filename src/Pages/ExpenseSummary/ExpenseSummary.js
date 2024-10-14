@@ -253,8 +253,6 @@ const ExpenseSummary = () => {
         },
       })
         .then((res) => {
-          console.log(res);
-
           setExpensesList(res.data.expenses);
           setTotalExpense(res.data.totalExpense || 0);
           setContentLoader(false);
@@ -302,8 +300,6 @@ const ExpenseSummary = () => {
         },
       })
         .then((res) => {
-          console.log(res);
-
           setExpensesList(res.data.expenses);
           setTotalExpense(res.data.totalExpense || 0);
           setContentLoader(false);

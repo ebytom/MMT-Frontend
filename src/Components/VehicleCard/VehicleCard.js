@@ -22,7 +22,7 @@ const VehicleCard = ({ data }) => {
   };
 
   const addNewVehicle = (newVehicleDetails) => {
-    console.log(newVehicleDetails);
+    // console.log(newVehicleDetails);
   };
 
   return (
