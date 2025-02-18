@@ -4,6 +4,7 @@ import { UserContext } from '../App'
 import Dashboard from '../Pages/Dashboard/Dashboard'
 import NavBar from '../Components/NavBar/NavBar'
 import ExpenseSummary from '../Pages/ExpenseSummary/ExpenseSummary'
+import CalculateLoan from '../Pages/CalculateLoan/CalculateLoan'
 
 const Home = () => {
 
@@ -14,6 +15,7 @@ const Home = () => {
             <NavBar />
             <Switch>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/calculateLoan/:vehicleId?" element={<CalculateLoan />} />
                 <Route path="/expenseSummary/:catalog/:vehicleId?" element={<ExpenseSummary />} />
                 <Route path="/*"  element={<Navigate to="/dashboard" replace />} />
             </Switch>

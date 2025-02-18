@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { Button, Modal } from "antd";
-import { AppsIcon, FlameIcon, LogIcon } from "@primer/octicons-react";
+import { Button, Divider, Modal } from "antd";
+import { AppsIcon, BriefcaseIcon, FlameIcon, LogIcon } from "@primer/octicons-react";
 import { useNavigate } from "react-router-dom";
 import { Axios } from "../../Config/Axios/Axios";
 
@@ -145,6 +145,38 @@ const CatalogModal = forwardRef(({ vehicleId, regNo }, ref) => {
             </div>
             <div className="bg-white p-1 rounded text-black w-50">
               <span className="fw-bold">{metadata.otherTotal?.toFixed(2)}</span>
+            </div>
+          </Button>
+        </div>
+        <Divider
+        style={{
+          borderColor: "#000",
+          margin: "25px 0px",
+        }}
+      ></Divider>
+        <div>
+        <Button
+            type="primary"
+            size={"large"}
+            className="my-2"
+            style={{
+              width: "100%",
+              height: "60px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+            onClick={() =>
+              navigate(`/calculateLoan/${vehicleId}`)
+            }
+          >
+            <div className="d-flex w-100 align-items-center justify-content-center p-2">
+              <BriefcaseIcon size={22} />
+              <div
+                className="d-flex flex-column ms-3"
+                style={{ alignItems: "flex-start" }}
+              >
+                <span className="fw-bold m-0 p-0">Calculate Loan</span>
+              </div>
             </div>
           </Button>
         </div>

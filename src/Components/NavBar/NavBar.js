@@ -29,7 +29,8 @@ const NavBar = () => {
 
   useEffect(() => {
     setTruckDetails({});
-    const truckId = loc.pathname.split("/")[3];
+    const locPath = loc.pathname.split("/")
+    const truckId = locPath[1]==="calculateLoan"?locPath[2]:locPath[3];
     if (truckId) {
       Axios.get(
         `/api/v1/app/truck/getTruckById/${truckId}`,
@@ -61,7 +62,7 @@ const NavBar = () => {
 
   return (
     <div className="mb-4">
-      {loc.pathname.startsWith("/expenseSummary/") ? (
+      {(loc.pathname.startsWith("/expenseSummary/") || loc.pathname.startsWith("/calculateLoan/"))? (
         <Space className="p-4 bg-dark w-100 rounded-3 d-flex justify-content-between">
           <Button
             type="dark"
@@ -79,7 +80,7 @@ const NavBar = () => {
           <div>
             <b className="text-white fw-800 fs-5">
               {registrationNo ? registrationNo : "All Trucks"} -{" "}
-              {expenses[loc.pathname.split("/")[2]]}
+              {loc.pathname.split("/")[1]==="calculateLoan"?"Calculate Loan":expenses[loc.pathname.split("/")[2]]}
             </b>
           </div>
           <div></div>
